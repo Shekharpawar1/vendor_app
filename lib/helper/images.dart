@@ -1,0 +1,1 @@
+final String app_logo='assets/logo.png';
