@@ -18,15 +18,15 @@ class LoginController extends GetxController{
   formValidation(){
     bool resp=true;
      if (Formkey.currentState!.validate()) {
-      // Valid form, handle submission
-      resp=validator();
-      print("response $resp");
-      if(resp==false){
-        return resp;
-      }
-      else{
+      // // Valid form, handle submission
+      // resp=validator();
+      // print("response $resp");
+      // if(resp==false){
+      //   return resp;
+      // }
+      // else{
         Get.offAllNamed("/home");
-      }
+      // }
 
     }
     else{

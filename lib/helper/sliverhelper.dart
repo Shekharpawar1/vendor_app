@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fun_n_food_vendor/helper/colors.dart';
 
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
@@ -20,12 +21,12 @@ class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return SizedBox.expand(child: child);
+    return SizedBox(child: child);
   }
 
   @override
   bool shouldRebuild(SliverAppBarDelegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight ||
+    return maxHeight != oldDelegate.minHeight ||
         minHeight != oldDelegate.minHeight ||
         child != oldDelegate.child;
   }

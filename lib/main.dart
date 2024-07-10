@@ -4,7 +4,7 @@ import 'package:fun_n_food_vendor/bindings/login_binding.dart';
 import 'package:fun_n_food_vendor/localization/language.dart';
 import 'package:fun_n_food_vendor/localization/language_en.dart';
 import 'package:fun_n_food_vendor/routes/appRoutes.dart';
-import 'package:fun_n_food_vendor/view/home.dart';
+import 'package:fun_n_food_vendor/view/homeWidget/home.dart';
 import 'package:fun_n_food_vendor/view/profile.dart';
 import 'package:fun_n_food_vendor/view/setting.dart';
 import 'package:get/get.dart';
@@ -26,6 +26,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(
+        useMaterial3: true, // Enable Material 3 theming
+
+        // Set a slightly transparent blue background
+
+        // Define a custom color scheme
+        canvasColor: Colors.purple,
+      ),
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.routes,
       initialRoute: AppRoutes.Login,
