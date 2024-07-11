@@ -1,22 +1,26 @@
 
 
+import 'package:fun_n_food_vendor/bindings/rating/ReviewListBinding.dart';
 import 'package:fun_n_food_vendor/bindings/critiqueBinding.dart';
+import 'package:fun_n_food_vendor/bindings/rating/rating_binding.dart';
 import 'package:fun_n_food_vendor/main.dart';
 import 'package:fun_n_food_vendor/view/critique_dashboard.dart';
+import 'package:fun_n_food_vendor/view/rating/rating.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../bindings/booking_list_binding.dart';
 import '../bindings/homeBinding.dart';
-import '../bindings/login_binding.dart';
+import '../bindings/auth/login_binding.dart';
 import '../bindings/notificationBinding.dart';
 import '../bindings/profileBinding.dart';
 import '../bindings/settingBinding.dart';
 import '../view/BookingList/bookingList.dart';
 import '../view/BottomNav.dart';
-import '../view/Loginscreen.dart';
+import '../view/auth/Loginscreen.dart';
 import '../view/homeWidget/home.dart';
 import '../view/notification.dart';
 import '../view/profile.dart';
+import '../view/rating/review_list.dart';
 import '../view/setting.dart';
 
 class AppRoutes {
@@ -28,7 +32,8 @@ class AppRoutes {
   static const Login='/login';
   static const BookingList='/bookingList';
   static const CritiqueDashboardScreen='/CritiqueDashboard';
-
+  static const ReviewList='/reviewList';
+  static const ratingScreen='/ratingScreen';
 
   static const initialRoute="/login";
 
@@ -42,5 +47,7 @@ class AppRoutes {
     GetPage(name: bottomNav, page: () => MainPage()),
     GetPage(name: BookingList, page: () => BookingListScreen(title: '',),binding: BookingListBinding()),
     GetPage(name: CritiqueDashboardScreen, page: () => CritiqueDashboard(),binding: CritiqueBinding()),
+    GetPage(name: ReviewList, page: () => ReviewListScreen(),binding: Reviewlistbinding()),
+    GetPage(name: ratingScreen, page: () =>RatingScreen(),binding: RatingBinding()),
   ];
 }

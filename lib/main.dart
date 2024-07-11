@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_n_food_vendor/bindings/login_binding.dart';
+import 'package:fun_n_food_vendor/bindings/auth/login_binding.dart';
 import 'package:fun_n_food_vendor/localization/language.dart';
 import 'package:fun_n_food_vendor/localization/language_en.dart';
 import 'package:fun_n_food_vendor/routes/appRoutes.dart';

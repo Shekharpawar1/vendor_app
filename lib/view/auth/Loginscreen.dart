@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fun_n_food_vendor/controller/login_controller.dart';
+import 'package:fun_n_food_vendor/controller/auth/login_controller.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../CommonWidgets/commonBtn.dart';
-import '../CommonWidgets/commonTextFormField.dart';
-import '../helper/colors.dart';
-import '../helper/images.dart';
-import '../main.dart';
+import '../../CommonWidgets/commonBtn.dart';
+import '../../CommonWidgets/commonTextFormField.dart';
+import '../../helper/colors.dart';
+import '../../helper/images.dart';
+import '../../main.dart';
 class Loginscreen extends GetView<LoginController> {
   const Loginscreen({super.key});
 

@@ -101,71 +101,43 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
         spacer1,
         SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language.lblCritiquesubtitle,style: Text4,),
-                  SizedBox(height: 2.h,),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration:boxDecoration1,
-
-                          width: 30.w, height: 16.5.h,
-                          child: Center(
-                            child: Column(mainAxisAlignment:MainAxisAlignment.center,children: [
-                              Text("0",style:Text5),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              Text(language.lblrating1,style: Text6,)
-                            ]),
-                          ),
-                        ),
-                        Container(
-                          decoration:boxDecoration1,
-                          width: 30.w,
-                          height: 16.5.h,
-                          child: Center(
-                            child: Column(mainAxisAlignment:MainAxisAlignment.center,children: [
-                              Text("0",style:Text5),   SizedBox(
-                                height: 2.h,
-                              ),
-                              Text(language.lblrating3,style: Text5 ,)
-                            ]),
-                          ),
-                        ),
-                        Container(
-                          decoration:boxDecoration1,
-                          width: 30.w,
-                          height: 16.5.h,
-                          child: Center(
-                            child: Column(mainAxisAlignment:MainAxisAlignment.center,children: [
-                              Text("0",style:Text5),
-                              SizedBox(
-                                height: 2.h,
-                              ),
-                              Text(language.lblrating2,style: Text6,)
-                            ]),
-                          ),
-                        ),
-                      ]),
-                ],
-              ),
-            )),
-        spacer1,
-        SliverToBoxAdapter(child:Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(language.lblCritiquesubtitle1,style: Text4,),
-              SizedBox(height: 3.h,),
+              Text(
+                language.lblCritiquesubtitle,
+                style: Text4,
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildReviewContainer("0", language.lblrating1),
+                    buildReviewContainer("0", language.lblrating3),
+                    buildReviewContainer("0", language.lblrating2),
+                  ]),
+            ],
+          ),
+        )),
+        spacer1,
+        SliverToBoxAdapter(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                language.lblCritiquesubtitle1,
+                style: Text4,
+              ),
+              SizedBox(
+                height: 3.h,
+              ),
               PieChart(
-
                 dataMap: {
                   'Pending': 70,
                   'In Progress': 10,
@@ -175,8 +147,7 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
                 legendOptions: LegendOptions(
                     showLegends: false,
                     legendPosition: LegendPosition.left,
-                    legendShape:BoxShape.circle
-                ),
+                    legendShape: BoxShape.circle),
                 colorList: [
                   Color(0xFFE1BEE7),
                   Color(0xFFCE93D8),
@@ -195,125 +166,59 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
           ),
         )),
         spacer1,
-        SliverToBoxAdapter(child:Padding(
+        SliverToBoxAdapter(
+            child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:[
-              Text(language.lblCritiquesubtitle2,style:Text4),
-              SizedBox(height: 3.h,),
-              InkWell(
-                onTap:()=>Get.toNamed("/CritiqueDashboard"),
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        Container(
-                          width: 100.w,
-                          height: 30.h,
-                          padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                          decoration: boxDecoration1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(language.lblCritiquesubtitle2, style: Text4),
+            SizedBox(
+              height: 3.h,
+            ),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 100.w,
+                      height: 30.h,
+                      padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                      decoration: boxDecoration1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text("Summary",
-                                        textAlign: TextAlign.left, style: Text4),
-                                  ),
-                                  Text("Avg. Rating", style: Text4),
-                                ],
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Text("Summary",
+                                    textAlign: TextAlign.left, style: Text4),
                               ),
-                              // Expanded(
-                              //   child: Row(
-                              //     children: [
-                              //       Expanded(
-                              //         child: ListView.builder(
-                              //           physics: NeverScrollableScrollPhysics(),
-                              //           itemCount: controller.item2.length,
-                              //           shrinkWrap: true,
-                              //           itemBuilder:
-                              //               (BuildContext context, int index) =>
-                              //               Padding(
-                              //                 padding: const EdgeInsets.symmetric(
-                              //                     vertical: 4.0),
-                              //                 child: Padding(
-                              //                   padding: const EdgeInsets.only(left: 8.0),
-                              //                   child: Row(
-                              //                     mainAxisAlignment:
-                              //                     MainAxisAlignment.spaceBetween,
-                              //                     children: [
-                              //                       Flexible(
-                              //                         child: Text(
-                              //                           controller.item2[index].title,
-                              //                           textAlign: TextAlign.left,
-                              //                           overflow: TextOverflow.ellipsis,
-                              //                         ),
-                              //                       ),
-                              //                       SizedBox(width: 12.0),
-                              //                       Container(
-                              //                         decoration: BoxDecoration(
-                              //                           borderRadius:
-                              //                           BorderRadius.circular(100),
-                              //                           color:
-                              //                           Colors.blue.withOpacity(0.5),
-                              //                         ),
-                              //                         child: Padding(
-                              //                           padding:
-                              //                           const EdgeInsets.all(8.0),
-                              //                           child: Text(controller
-                              //                               .item2[index].count
-                              //                               .toString()),
-                              //                         ),
-                              //                       ),
-                              //                     ],
-                              //                   ),
-                              //                 ),
-                              //               ),
-                              //         ),
-                              //       ),
-                              //       VerticalDivider(),
-                              //       Container(
-                              //         child: Expanded(
-                              //           child: Column(
-                              //             crossAxisAlignment:
-                              //             CrossAxisAlignment.center,
-                              //             mainAxisAlignment: MainAxisAlignment.center,
-                              //             children: [
-                              //               Text(
-                              //                 "555.0",
-                              //                 style: Text4,
-                              //               ),
-                              //               SizedBox(height: 8.0),
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
+                              Text("Avg. Rating", style: Text4),
                             ],
                           ),
-                        ),
-
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              )
-            ]
-          ),
+              ),
+            )
+          ]),
         )),
         spacer1,
-        SliverToBoxAdapter(child:Padding(
+        SliverToBoxAdapter(
+            child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start,children:[Text(language.lblCritiquesubtitle3,style:Text4),SizedBox(height: 1.h,),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(language.lblCritiquesubtitle3, style: Text4),
+            SizedBox(
+              height: 1.h,
+            ),
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -330,9 +235,8 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
                           '${item['title']}:',
                           textScaleFactor: 1,
                           style: TextStyle(
-
                             fontSize: 12,
-                            color:Colors.black45,
+                            color: Colors.black45,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -340,7 +244,6 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
                           item['price']!,
                           textScaleFactor: 1,
                           style: TextStyle(
-
                             fontSize: 12,
                             color: primaryColor,
                             fontWeight: FontWeight.w600,
@@ -357,7 +260,8 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
                   ],
                 );
               },
-            ),]),
+            ),
+          ]),
         ))
         // SliverToBoxAdapter(
         //   child: Column(
@@ -381,5 +285,28 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
         // )
       ],
     ));
+  }
+
+  InkWell buildReviewContainer(count, title) {
+    return InkWell(
+      onTap: () => Get.toNamed('/reviewList'),
+      child: Container(
+        decoration: boxDecoration1,
+        width: 30.w,
+        height: 16.5.h,
+        child: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(count, style: Text5),
+            SizedBox(
+              height: 2.h,
+            ),
+            Text(
+              title,
+              style: Text6,
+            )
+          ]),
+        ),
+      ),
+    );
   }
 }

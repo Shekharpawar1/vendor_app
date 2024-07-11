@@ -138,5 +138,9 @@ class LanguagesEn extends BaseLanguage {
   // TODO: implement lblCritiquesubtitle3
   String get lblCritiquesubtitle3 => "Recommended Actions";
 
+  @override
+  // TODO: implement lblReviewTitle
+  String get lblReviewTitle => "Review List";
+
 
 }

@@ -14,21 +14,22 @@ SliverAppBar CommonSliverAppBar(title,icon1,icon2,onTap1,onTap2,controller,islea
     backgroundColor: Colors.purpleAccent.withOpacity(0.7),
     title: Text(title, style: Text1),
     actions: [
-
+      (icon1!=null)?
       IconButton(
         onPressed: () => onTap1,
         icon: Icon(
           icon1,
           color: Colors.white,
         ),
-      ),
+      ):SizedBox.shrink(),
+      (icon2!=null)?
       IconButton(
         onPressed: () => onTap2,
         icon: Icon(
           icon2,
           color: Colors.white,
         ),
-      ),
+      ):SizedBox.shrink(),
     ],
     expandedHeight: 10.h, // Adjust the expanded height as needed
     // floating: true,
