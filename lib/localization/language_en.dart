@@ -142,5 +142,17 @@ class LanguagesEn extends BaseLanguage {
   // TODO: implement lblReviewTitle
   String get lblReviewTitle => "Review List";
 
+  @override
+  // TODO: implement lblRatingTitle
+  String get lblRatingTitle => "Rating";
+
+  @override
+  // TODO: implement lblRatingSubHeading
+  String get lblRatingSubHeading => "Overall Ratings";
+
+  @override
+  // TODO: implement lblRatingSubHeading2
+  String get lblRatingSubHeading2 => "Detailed Ratings";
+
 
 }

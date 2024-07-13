@@ -25,7 +25,11 @@ class LoginController extends GetxController{
       //   return resp;
       // }
       // else{
-        Get.offAllNamed("/home");
+
+// Get.toNamed("/quickView");
+Get.offAllNamed("/bottomNav");
+       // Get.toNamed("/settings");
+      //   Get.offAllNamed("/home");
       // }
 
     }

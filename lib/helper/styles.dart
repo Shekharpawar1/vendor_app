@@ -14,6 +14,7 @@ final TextStyle Text5=TextStyle(color: Colors.cyan,fontSize: 18.sp,fontWeight: F
 final TextStyle Text6=TextStyle(color: Colors.green,fontSize: 18.sp,fontWeight: FontWeight.w600,);
 final TextStyle Text7=TextStyle(color: Colors.grey,fontSize: 17.sp,fontWeight: FontWeight.w400,);
 final TextStyle Text8=TextStyle(color: Colors.white,fontSize: 18.sp,fontWeight: FontWeight.w500,);
+final TextStyle Text9=TextStyle(color: Colors.purple,fontSize: 16.sp,fontWeight: FontWeight.w600,);
 
 ////background decoration
 final BoxDecoration boxDecoration1=BoxDecoration(

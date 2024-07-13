@@ -47,5 +47,8 @@ abstract class BaseLanguage {
 
   String get lblCritiquesubtitle3;
   String get lblReviewTitle;
+  String get lblRatingTitle;
+  String get lblRatingSubHeading;
+  String get lblRatingSubHeading2;
 
 }

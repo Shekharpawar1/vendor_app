@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
+import '../../CommonWidgets/ProgressbarWidget.dart';
 import '../../helper/styles.dart';
 import '../../main.dart';
 import '../../routes/appRoutes.dart';
@@ -228,14 +229,7 @@ Widget _buildRow(String title, String value) {
         SizedBox(width: 16.0),
         Expanded(
           flex: 2, // Adjust flex value as needed
-          child: ProgressBar(
-            value: 0.5,
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.purpleAccent, Colors.deepOrange],
-            ),
-          ),
+          child: ProgressBarWidget(value: .5,),
         ),
         Expanded(
           child: Text(
@@ -248,3 +242,4 @@ Widget _buildRow(String title, String value) {
     ),
   );
 }
+

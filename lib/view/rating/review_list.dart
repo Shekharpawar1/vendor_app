@@ -18,7 +18,7 @@ class ReviewListScreen extends GetView<ReviewListController> {
         body: CustomScrollView(
       slivers: [
         CommonSliverAppBar(language.lblReviewTitle, Icons.refresh, null, ()=>controller.onInit(),
-            () {}, controller, true, () => Get.back()),
+            () {}, true, () => Get.back()),
         spacer5,
         SliverToBoxAdapter(
           child: Obx(

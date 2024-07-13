@@ -20,21 +20,44 @@ class BookingListScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(title, style: Text1),
           backgroundColor: primaryColor,
-          leading: Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.white,
+          leading: InkWell(
+            onTap:()=>Get.back(),
+            child: Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+            ),
           ),
           actions: [
-            IconButton(
-                onPressed: () {
-
-
-                  showAlertBox(context, controller);
-            },
-                icon: Icon(
-                  Icons.linear_scale,
-                  color: Colors.white,
-                ))
+            PopupMenuButton<String>(
+              iconColor: Colors.white,
+              onSelected: (value) {
+                switch (value) {
+                  case 'refresh':
+                  // Implement refresh functionality
+                    break;
+                  case 'sort':
+                  // Implement sort functionality
+                    break;
+                  case 'filter':
+                  // Implement filter functionality
+                    break;
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'refresh',
+                  child: Text('Refresh'),
+                ),
+                PopupMenuItem(
+                  value: 'sort',
+                  child: Text('Sort'),
+                ),
+                PopupMenuItem(
+                  value: 'filter',
+                  child: Text('Filter'),
+                ),
+              ],
+            ),
           ],
           bottom: (title == 'Arrival' || title == 'Departure')
               ? PreferredSize(
@@ -53,7 +76,7 @@ class BookingListScreen extends StatelessWidget {
           child: ListView.builder(
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) => Container(
-                  height: 30.h, width: 100.w, child: ReservationCard()),
+                  height: 30.h, width: 100.w, child: ReservationCard(controller:controller)),
               itemCount: 2),
         ));
   }
@@ -163,6 +186,9 @@ class _BottomTextRowState extends State<BottomTextRow> {
 }
 
 class ReservationCard extends StatelessWidget {
+
+  BookingListController controller;
+  ReservationCard({super.key,required this.controller});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -201,7 +227,7 @@ class ReservationCard extends StatelessWidget {
                           SizedBox(width: 8.0),
                           Text('Folio 538'),
                           Spacer(),
-                          Icon(Icons.more_vert),
+                          InkWell(onTap:()=>controller.showBottomSheet(context),child: Icon(Icons.more_vert)),
                         ],
                       ),
                       SizedBox(height: 8.0),

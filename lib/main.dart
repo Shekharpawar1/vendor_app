@@ -4,11 +4,7 @@ import 'package:fun_n_food_vendor/bindings/auth/login_binding.dart';
 import 'package:fun_n_food_vendor/localization/language.dart';
 import 'package:fun_n_food_vendor/localization/language_en.dart';
 import 'package:fun_n_food_vendor/routes/appRoutes.dart';
-import 'package:fun_n_food_vendor/view/homeWidget/home.dart';
-import 'package:fun_n_food_vendor/view/profile.dart';
-import 'package:fun_n_food_vendor/view/setting.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'controller/bottomController.dart';
@@ -36,11 +32,17 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.routes,
-      initialRoute: AppRoutes.Login,
+      initialRoute: AppRoutes.initialRoute,
         initialBinding: LoginBinding(),
       // home: MainPage(),
     );
   }
 }
+
+
+
+
+
+
 
 

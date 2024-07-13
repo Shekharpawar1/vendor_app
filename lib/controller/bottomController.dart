@@ -17,6 +17,13 @@ class BottomNavController extends GetxController {
     super.onInit();
 
   }
+
+
+
+  updateValue(value){
+    selectedIndex.value=value;
+    changePage(value);
+  }
   void changePage(int index) {
     selectedIndex.value = index;
     switch(index){

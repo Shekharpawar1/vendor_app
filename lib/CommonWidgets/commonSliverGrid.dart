@@ -9,8 +9,9 @@ import '../main.dart';
 import 'gridcard.dart';
 
 class CommonGrid extends StatelessWidget {
+  var controller;
    CommonGrid({
-    super.key, required Homecontroller controller,
+    super.key, required  this.controller,
   });
 
   @override

@@ -4,8 +4,8 @@ import '../helper/styles.dart';
 
 Card buildCard(title,content,subcontent,style) {
   return Card(
-    surfaceTintColor: Colors.purpleAccent.withOpacity(0.1),
-    elevation: 5.0, // Add a slight shadow for depth
+    surfaceTintColor: Colors.white,
+    elevation: 2.0, // Add a slight shadow for depth
     shape: RoundedRectangleBorder(
         borderRadius:
         BorderRadius.circular(10.0)), // Rounded corners

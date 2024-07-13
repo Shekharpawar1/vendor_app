@@ -1,80 +1,81 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_n_food_vendor/view/profile.dart';
+import 'package:fun_n_food_vendor/view/quickViewScreen.dart';
 import 'package:fun_n_food_vendor/view/setting.dart';
+import 'package:fun_n_food_vendor/view/stay_view.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../controller/bottomController.dart';
 import 'homeWidget/home.dart';
+import 'notification.dart'; // Assuming you're using GetX for state management
 
-class MainPage extends StatelessWidget {
+class MainPage extends GetView<BottomNavController> {
+
+  MainPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    BottomNavController bottomNavController = Get.put(BottomNavController());
+
+
+
     return Scaffold(
       body: Obx(() {
-        switch (bottomNavController.selectedIndex.value) {
+
+        switch (controller.selectedIndex.value) {
           case 0:
             return HomeScreen();
           case 1:
-            return ProfileScreen();
+            return RoomAvailabilityScreen();
           case 2:
-            return SettingScreen();
+            return NotificationScreen();
           case 3:
             return SettingScreen();
+          case 4: // Corrected index for Quickviewscreen
+            return Quickviewscreen();
           default:
-            return HomeScreen();
+            return HomeScreen(); // Default case adjusted
         }
       }),
       floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(),
-        backgroundColor: CupertinoDynamicColor.withBrightness(color: Colors.white, darkColor: Colors.black12),
         onPressed: () {
-          bottomNavController.selectedIndex.value = 5;
-          // Handle button press
+          controller.selectedIndex.value = 4; // Adjusted index for Quickviewscreen
         },
-        child: Icon(
-          Icons.visibility_outlined,
-          color: Colors.black,
-        ),
+        child: Icon(Icons.visibility_outlined),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomNavigationBar: Obx(()=>
-      //   BottomAppBar(
-      //       shape: CircularNotchedRectangle(),
-      //       notchMargin: 8.0,
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //         children: <Widget>[
-      //           IconButton(
-      //             icon: Icon(Icons.home_outlined,size: 30,),
-      //             onPressed: () {
-      //               bottomNavController.selectedIndex.value = 0;
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.calendar_today_outlined,size: 23,),
-      //             onPressed: () {
-      //               bottomNavController.selectedIndex.value = 1;
-      //             },
-      //           ),
-      //           SizedBox(width: 40), // The dummy child for the notch
-      //           IconButton(
-      //             icon: Icon(Icons.notifications_outlined,size: 30,),
-      //             onPressed: () {
-      //               bottomNavController.selectedIndex.value = 2;
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.person_outlined,size:30,),
-      //             onPressed: () {
-      //               bottomNavController.selectedIndex.value = 3;
-      //             },
-      //           ),
-      //         ],
-      //       ))))
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home_outlined),
+              onPressed: () {
+                controller.selectedIndex.value = 0;
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.calendar_today_outlined),
+              onPressed: () {
+                controller.selectedIndex.value = 1;
+              },
+            ),
+            SizedBox(width: 40), // Adjusted spacing
+            IconButton(
+              icon: Icon(Icons.notifications_outlined),
+              onPressed: () {
+                controller.selectedIndex.value = 2;
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.person_outlined),
+              onPressed: () {
+                controller.selectedIndex.value = 3;
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

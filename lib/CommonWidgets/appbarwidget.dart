@@ -4,7 +4,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../helper/styles.dart';
 
-SliverAppBar CommonSliverAppBar(title,icon1,icon2,onTap1,onTap2,controller,isleading,onTap3) {
+SliverAppBar CommonSliverAppBar(title,icon1,icon2,onTap1,onTap2,isleading,onTap3) {
   return SliverAppBar(
     elevation: 0,
     automaticallyImplyLeading: isleading,

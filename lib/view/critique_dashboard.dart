@@ -22,7 +22,7 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
             Icons.linear_scale,
             () {},
             () {},
-            controller,
+
             true,
             () => Get.back()),
         spacer3,
@@ -33,69 +33,29 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(children: [
-                  Container(
-                    decoration: boxDecoration1,
-                    width: 60.w,
-                    child: Center(
-                      child: Column(children: [
-                        Text("0"),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text("shekhar")
-                      ]),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Row(children: [
-                    Container(
-                      decoration: boxDecoration1,
-                      width: 30.w,
-                      child: Center(
-                        child: Column(children: [
-                          Text("0"),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text("shekhar")
-                        ]),
-                      ),
+                Expanded(flex:1,
+                  child: Column(children: [
+                    InkWell(
+                      onTap:()=>Get.toNamed("/ratingScreen"),
+                      child:
+
+
+                      buildContainer(60.w,null,"0","Total Reviews"),
+
                     ),
                     SizedBox(
-                      width: 2.w,
+                      height: 2.h,
                     ),
-                    Container(
-                      decoration: boxDecoration1,
-                      width: 30.w,
-                      child: Center(
-                        child: Column(children: [
-                          Text("0"),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text("shekhar")
-                        ]),
-                      ),
-                    ),
-                  ])
-                ]),
-                Container(
-                  decoration: boxDecoration1,
-                  width: 30.w,
-                  height: 16.5.h,
-                  child: Center(
-                    child: Column(children: [
-                      Text("0"),
+                    Row(children: [
+                      buildContainer(30.w,null,"0","Positive"),
                       SizedBox(
-                        height: 2.h,
+                        width: 2.w,
                       ),
-                      Text("shekhar")
-                    ]),
-                  ),
+                      buildContainer(30.w,null,"0","Negative"),
+                    ])
+                  ]),
                 ),
+                buildContainer(30.w,17.5.h,"0","Avg. Rating"),
               ]),
         )),
         spacer1,
@@ -285,6 +245,28 @@ class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
         // )
       ],
     ));
+  }
+
+  InkWell buildContainer(width,height,count,title) {
+    return InkWell(
+      onTap:()=>Get.toNamed("/ratingScreen"),
+      child: Container(
+                      decoration: boxDecoration1,
+                      width: width,
+                      height:(height!=null)?height:8.h,
+                      child: Center(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                          Text(count),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Text(title)
+                        ]),
+                      ),
+                    ),
+    );
   }
 
   InkWell buildReviewContainer(count, title) {
