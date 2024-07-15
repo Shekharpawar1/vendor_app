@@ -2,6 +2,7 @@
 
 import 'package:fun_n_food_vendor/bindings/booking/quick_booking_binding.dart';
 import 'package:fun_n_food_vendor/bindings/bottom_binding.dart';
+import 'package:fun_n_food_vendor/bindings/editGuestBinding.dart';
 import 'package:fun_n_food_vendor/bindings/maintenence_binding.dart';
 import 'package:fun_n_food_vendor/bindings/manager_report_binding.dart';
 import 'package:fun_n_food_vendor/bindings/quick_view_binding.dart';
@@ -9,15 +10,19 @@ import 'package:fun_n_food_vendor/bindings/rating/ReviewListBinding.dart';
 import 'package:fun_n_food_vendor/bindings/critiqueBinding.dart';
 import 'package:fun_n_food_vendor/bindings/rating/rating_binding.dart';
 import 'package:fun_n_food_vendor/main.dart';
+import 'package:fun_n_food_vendor/view/AddGuestProfileScreen.dart';
 import 'package:fun_n_food_vendor/view/Booking/quickBooking.dart';
-import 'package:fun_n_food_vendor/view/critique_dashboard.dart';
+import 'package:fun_n_food_vendor/view/editGuestProfile.dart';
+import 'package:fun_n_food_vendor/view/other/critique_dashboard.dart';
 import 'package:fun_n_food_vendor/view/manager_report.dart';
 import 'package:fun_n_food_vendor/view/quickViewScreen.dart';
 import 'package:fun_n_food_vendor/view/rating/rating.dart';
 import 'package:fun_n_food_vendor/view/work_order_list.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
+import '../bindings/adguestinfobinding.dart';
 import '../bindings/booking_list_binding.dart';
+import '../bindings/bookingdetailsBinding.dart';
 import '../bindings/homeBinding.dart';
 import '../bindings/auth/login_binding.dart';
 import '../bindings/home_status_binding.dart';
@@ -25,6 +30,7 @@ import '../bindings/notificationBinding.dart';
 import '../bindings/profileBinding.dart';
 import '../bindings/settingBinding.dart';
 import '../bindings/work_order_binding.dart';
+import '../view/BookingDetails.dart';
 import '../view/BookingList/bookingList.dart';
 import '../view/BottomNav.dart';
 import '../view/auth/Loginscreen.dart';
@@ -53,6 +59,10 @@ class AppRoutes {
   static const MaintenenceBlock="/MaintenenceBlockView";
   static const managerReport="/ManagerReport";
   static const Homestatus="/homeStatus";
+  static const GuestProfile="/Guestprofile";
+  static const bookingDetails="/bookingDetails";
+  static const addGuestInfo="/addGuestInfo";
+  static const editGuestInfo="/editGuestInfo";
   static final routes = [
     GetPage(name: home, page: () => HomeScreen(),binding: HomeBinding()),
     GetPage(name: profile, page: () => ProfileScreen(),binding: ProfileBinding()),
@@ -70,5 +80,9 @@ class AppRoutes {
     GetPage(name: MaintenenceBlock, page: () =>MaintenenceBlockView(),binding:MaintenenceBinding()) ,
     GetPage(name: managerReport, page: () =>ManagerReportScreen(),binding:ManagerReportBinding()) ,
     GetPage(name: Homestatus, page: () =>HouseStatusScreen(),binding:HomeStatusBinding()) ,
+    GetPage(name: GuestProfile, page: () =>HouseStatusScreen(),binding:HomeStatusBinding()) ,
+    GetPage(name: bookingDetails, page: () =>BookingDetails(),binding:BookingDetailsbinding()) ,
+    GetPage(name: addGuestInfo, page: () =>AddGuestInfo(),binding:Adguestinfobinding()) ,
+    GetPage(name: editGuestInfo, page: () =>EditGuest(),binding:Editguestbinding()) ,
   ];
 }

@@ -18,7 +18,7 @@ class Settingcontroller extends GetxController {
   List<PageList> pages = [
     PageList(
       name: 'Dashboard',
-      icon: Icons.house,
+      icon: Icons.dashboard_outlined,
       onTap: () {
         Get.find<BottomNavController>().selectedIndex.value = 0;
         Get.off(MainPage()); // Example usage of passing index to MainPage
@@ -26,21 +26,21 @@ class Settingcontroller extends GetxController {
     ),
     PageList(
       name: 'Quick Booking',
-      icon: Icons.add,
+      icon: Icons.add_circle_outline,
       onTap: () {
         Get.toNamed("/quickbooking");
       },
     ),
     PageList(
       name: 'Arrival List',
-      icon: Icons.house,
+      icon: Icons.people_outlined,
       onTap: () {
         Get.to(BookingListScreen(title: "Arrival"));
       },
     ),
     PageList(
       name: 'Departure List',
-      icon: Icons.house,
+      icon: Icons.exit_to_app,
       onTap: () {
         Get.to(BookingListScreen(title: "Departure"));
       },
@@ -54,16 +54,15 @@ class Settingcontroller extends GetxController {
     ),
     PageList(
       name: 'In-House',
-      icon: Icons.house,
+      icon: Icons.home_outlined,
       onTap: () {
         Get.to(BookingListScreen(title: "In-House"));
       },
     ),
     PageList(
       name: 'Quick View',
-      icon: Icons.visibility,
+      icon: Icons.visibility_outlined,
       onTap: () {
-
         Get.find<BottomNavController>().selectedIndex.value = 4;
         Get.off(MainPage()); // Example usage of passing index to MainPage
       },
@@ -73,12 +72,12 @@ class Settingcontroller extends GetxController {
       icon: Icons.calendar_today,
       onTap: () {
         Get.find<BottomNavController>().selectedIndex.value = 1;
-        Get.off(MainPage());  // Example usage of passing index to MainPage
+        Get.off(MainPage()); // Example usage of passing index to MainPage
       },
     ),
     PageList(
       name: 'Manager Report',
-      icon: Icons.file_copy_sharp,
+      icon: Icons.file_copy_outlined,
       onTap: () {
         Get.toNamed("/ManagerReport");
         // Add your functionality
@@ -86,14 +85,14 @@ class Settingcontroller extends GetxController {
     ),
     PageList(
       name: 'Notification',
-      icon: Icons.notifications,
+      icon: Icons.notifications_none_outlined,
       onTap: () {
         Get.toNamed('/notification');
       },
     ),
     PageList(
       name: 'Maintenance Block List',
-      icon: Icons.front_hand_sharp,
+      icon: Icons.build_outlined,
       onTap: () {
         Get.toNamed("/MaintenenceBlockView");
         // Add your functionality
@@ -101,15 +100,15 @@ class Settingcontroller extends GetxController {
     ),
     PageList(
       name: 'Work Order List',
-      icon: Icons.house,
+      icon: Icons.work_outline,
       onTap: () {
-       Get.to(WorkOrderList(title:"Work Order List"));
+        Get.to(WorkOrderList(title: "Work Order List"));
         // Add your functionality
       },
     ),
     PageList(
       name: 'House Status',
-      icon: Icons.house,
+      icon: Icons.home_outlined,
       onTap: () {
         Get.toNamed("/homeStatus");
         // Add your functionality
@@ -117,32 +116,25 @@ class Settingcontroller extends GetxController {
     ),
     PageList(
       name: 'Critique Dashboard',
-      icon: Icons.padding,
+      icon: Icons.feedback_outlined,
       onTap: () {
         Get.toNamed("/CritiqueDashboard");
       },
     ),
     PageList(
       name: 'Critque Rating List',
-      icon: Icons.visibility,
+      icon: Icons.rate_review_outlined,
       onTap: () {
         Get.toNamed("/reviewList");
       },
     ),
     PageList(
       name: 'Critique Ratings',
-      icon: Icons.star,
+      icon: Icons.star_border_outlined,
       onTap: () {
         Get.toNamed("/ratingScreen");
       },
     ),
-    // PageList(
-    //   name: 'Critique Competitor Analysis',
-    //   icon: Icons.line_axis,
-    //   onTap: () {
-    //     // Add your functionality
-    //   },
-    // ),
     PageList(
       name: 'Logout',
       icon: Icons.logout,
@@ -151,6 +143,7 @@ class Settingcontroller extends GetxController {
       },
     ),
   ];
+
 }
 
 class PageList {

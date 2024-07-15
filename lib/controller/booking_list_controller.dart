@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fun_n_food_vendor/view/BookingDetails.dart';
 import 'package:get/get.dart';
 
 class BookingListController extends GetxController{
@@ -18,10 +19,23 @@ class BookingListController extends GetxController{
           child: Wrap(
             children: [
               ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Edit Guest Profile'),
+                onTap: () {
+                  Get.toNamed("/editGuestInfo");
+                  // Navigator.pop(context);
+                  // Add your onTap code here
+                },
+              ),
+              ListTile(
                 leading: Icon(Icons.remove_red_eye),
                 title: Text('View Reservation'),
                 onTap: () {
-                  Navigator.pop(context);
+
+                  Get.to(()=>BookingDetails());
+                  print("geting called");
+                  // Get.toNamed("/bookingDetails");
+                  // Navigator.pop(context);
                   // Add your onTap code here
                 },
               ),

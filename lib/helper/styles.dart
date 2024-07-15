@@ -3,19 +3,26 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import 'colors.dart';
+
 
 
 //////text style
 final TextStyle Text1=TextStyle(color: Colors.white,fontSize: 20.sp,fontWeight: FontWeight.w500,);
 final TextStyle Text2=TextStyle(color: Colors.black,fontSize: 16.sp,fontWeight: FontWeight.w600,);
 final TextStyle Text3=TextStyle(color: Colors.orange,fontSize: 18.sp,fontWeight: FontWeight.w600,);
-final TextStyle Text4=TextStyle(color: Colors.purple,fontSize: 18.sp,fontWeight: FontWeight.w600,);
+final TextStyle Text4=TextStyle(color: primaryColor,fontSize: 18.sp,fontWeight: FontWeight.w600,);
 final TextStyle Text5=TextStyle(color: Colors.cyan,fontSize: 18.sp,fontWeight: FontWeight.w600,);
 final TextStyle Text6=TextStyle(color: Colors.green,fontSize: 18.sp,fontWeight: FontWeight.w600,);
 final TextStyle Text7=TextStyle(color: Colors.grey,fontSize: 17.sp,fontWeight: FontWeight.w400,);
 final TextStyle Text8=TextStyle(color: Colors.white,fontSize: 18.sp,fontWeight: FontWeight.w500,);
-final TextStyle Text9=TextStyle(color: Colors.purple,fontSize: 16.sp,fontWeight: FontWeight.w600,);
-
+final TextStyle Text9=TextStyle(color: primaryColor,fontSize: 16.sp,fontWeight: FontWeight.w600,);
+final TextStyle Text10=TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w400,);
+final TextStyle Text11=TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w400,);
+final TextStyle Text12=TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.w400,);
+final TextStyle Text13=TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.w400,);
+final TextStyle Text14=TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w400,);
+final TextStyle Text15=TextStyle(color: Colors.grey,fontSize: 12,fontWeight: FontWeight.w400,);
 ////background decoration
 final BoxDecoration boxDecoration1=BoxDecoration(
   boxShadow: [

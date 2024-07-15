@@ -211,11 +211,13 @@ class ReservationCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(width: 16.0),
+
                 Expanded( // Added to make sure the Column takes available space
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Mr. Monoco', style: TextStyle(color: Colors.purple)),
+
                       Row(
                         children: [
                           Text('Res '),

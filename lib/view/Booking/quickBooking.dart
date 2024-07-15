@@ -128,7 +128,7 @@ class BookingTypeAndRoomsSection extends GetView<QuickBookingController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 11.h,
+      height: 12.h,
       padding: EdgeInsets.all(10),
       decoration: boxDecoration1,
       child: Row(
@@ -156,11 +156,20 @@ class RoomInformationSection extends GetView<QuickBookingController> {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                RoomInfoRow(label: "RoomType", value: controller.totalRooms.value),
+                RoomInfoRow(
+                    label: "Room Type",
+                    value: controller.totalRooms.value,
+                    controller: controller),
                 Divider(),
-                RoomInfoRow(label: "Rate Type", value: controller.totalRooms.value),
+                RoomInfoRow(
+                    label: "Rate Type",
+                    value: controller.totalRooms.value,
+                    controller: controller),
                 Divider(),
-                RoomInfoRow(label: "Rate Override", value: controller.totalRooms.value),
+                RoomInfoRow(
+                    label: "Rate Override",
+                    value: controller.totalRooms.value,
+                    controller: controller),
               ],
             ),
           ),
@@ -182,10 +191,10 @@ class GuestInformationSection extends GetView<QuickBookingController> {
             Text("Guest Information", style: Text9),
             Row(
               children: [
-                buildBookingTypeObxContainer(controller,
-                    'New', 1, 10.0, 0.0, 10.0, 0.0, 'GuestInfo'),
-                buildBookingTypeObxContainer(controller,
-                    'Returning', 2, 0.0, 10.0, 0.0, 10.0, 'GuestInfo'),
+                buildBookingTypeObxContainer(
+                    controller, 'New', 1, 10.0, 0.0, 10.0, 0.0, 'GuestInfo'),
+                buildBookingTypeObxContainer(controller, 'Returning', 2, 0.0,
+                    10.0, 0.0, 10.0, 'GuestInfo'),
               ],
             ),
           ],
@@ -194,30 +203,30 @@ class GuestInformationSection extends GetView<QuickBookingController> {
         Container(
           decoration: boxDecoration1,
           child: Obx(() => Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: (controller.GuestType.value == 2)
-                ? TextField(
-              decoration: InputDecoration(
-                hintText: 'search name of the guest',
-                prefixIcon: Icon(Icons.search),
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(12.0),
-              ),
-              onChanged: (value) {
-                // Add search functionality here
-                // controller.search(value);
-              },
-            )
-                : Column(
-              children: [
-                GuestInfoRow(label: "Guest Name"),
-                Divider(),
-                GuestInfoRow(label: "Phone number"),
-                Divider(),
-                GuestInfoRow(label: "Email Id"),
-              ],
-            ),
-          )),
+                padding: const EdgeInsets.all(8.0),
+                child: (controller.GuestType.value == 2)
+                    ? TextField(
+                        decoration: InputDecoration(
+                          hintText: 'search name of the guest',
+                          prefixIcon: Icon(Icons.search),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(12.0),
+                        ),
+                        onChanged: (value) {
+                          // Add search functionality here
+                          // controller.search(value);
+                        },
+                      )
+                    : Column(
+                        children: [
+                          GuestInfoRow(label: "Guest Name"),
+                          Divider(),
+                          GuestInfoRow(label: "Phone number"),
+                          Divider(),
+                          GuestInfoRow(label: "Email Id"),
+                        ],
+                      ),
+              )),
         ),
       ],
     );
@@ -232,25 +241,29 @@ class BottomBookingBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), // Lower opacity for a subtle shadow
+            color: Colors.black
+                .withOpacity(0.1), // Lower opacity for a subtle shadow
             spreadRadius: 1,
             blurRadius: 5,
             offset: Offset(2, 2), // Shadow position
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), // Lower opacity for a subtle shadow
+            color: Colors.black
+                .withOpacity(0.1), // Lower opacity for a subtle shadow
             spreadRadius: 1,
             blurRadius: 5,
             offset: Offset(-2, -2), // Shadow position
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), // Lower opacity for a subtle shadow
+            color: Colors.black
+                .withOpacity(0.1), // Lower opacity for a subtle shadow
             spreadRadius: 1,
             blurRadius: 5,
             offset: Offset(2, -2), // Shadow position
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.1), // Lower opacity for a subtle shadow
+            color: Colors.black
+                .withOpacity(0.1), // Lower opacity for a subtle shadow
             spreadRadius: 1,
             blurRadius: 5,
             offset: Offset(-2, 2), // Shadow position
@@ -280,7 +293,7 @@ class BottomBookingBar extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "book now",
-                    style: Text1,
+                    style: Text8,
                   ),
                 ),
               ),
@@ -331,10 +344,7 @@ class NightsBox extends StatelessWidget {
       width: 20.w,
       decoration: boxDecoration1,
       child: Column(
-        children: [
-          Text(nights),
-          Text("night")
-        ],
+        children: [Text(nights), Text("night")],
       ),
     );
   }
@@ -343,19 +353,27 @@ class NightsBox extends StatelessWidget {
 class BookingTypeSelector extends GetView<QuickBookingController> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text("Booking type"),
-        SizedBox(height: .5.h),
-        Row(
-          children: [
-            buildBookingTypeObxContainer(controller,
-                'New', 1, 10.0, 0.0, 10.0, 0.0, 'BookingType'),
-            buildBookingTypeObxContainer(controller,
-                'Returning', 2, 0.0, 10.0, 0.0, 10.0, 'BookingType'),
-          ],
-        )
-      ],
+    return Container(
+      height: 100,
+      child: Column(
+        children: [
+          Text("Booking type"),
+          SizedBox(height: .5.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              buildBookingTypeObxContainer(controller, 'Confirm', 1, 10.0, 0.0,
+                  10.0, 0.0, 'BookingType'),
+              // SizedBox(width: 8.0), // buildBookingTypeObxContainer(
+              buildBookingTypeObxContainer(
+                  controller, 'Inquiry', 2, 0.0, 0.0, 0.0, 0.0, 'BookingType'),
+              // SizedBox(width: 8.0), // Add some space between the buttons
+              buildBookingTypeObxContainer(
+                  controller, 'Hold', 3, 0.0, 10.0, 0.0, 10.0, 'BookingType'),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -366,16 +384,23 @@ class RoomsSelector extends GetView<QuickBookingController> {
     return Column(
       children: [
         Text("Rooms"),
-        SizedBox(height: 2.h),
-        Row(
-          children: [
-
-            Obx(() => Text(controller.totalRooms.value)),
-            IconButton(
-              onPressed: () => controller.showModal2(context),
-              icon: Icon(Icons.add),
+        Container(
+          decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(.5),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10, left: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Obx(() => Text(controller.totalRooms.value)),
+                IconButton(
+                  onPressed: () => controller.showModal2(context),
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+              ],
             ),
-          ],
+          ),
         )
       ],
     );
@@ -385,8 +410,10 @@ class RoomsSelector extends GetView<QuickBookingController> {
 class RoomInfoRow extends StatelessWidget {
   final String label;
   final String value;
+  final controller;
 
-  RoomInfoRow({required this.label, required this.value});
+  RoomInfoRow(
+      {required this.label, required this.value, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -394,7 +421,45 @@ class RoomInfoRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label),
-        Text(value)
+        (label == 'Rate Override')
+            ? Obx(
+                () => Switch.adaptive(
+                  value: controller.isSwitchOn.value,
+                  onChanged: (value) {
+                    controller.isSwitchOn.value = value;
+                  },
+                ),
+              )
+            : Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(.5),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10, left: 10),
+                  child: (label=='Room Type')?
+                  InkWell(
+                    onTap:()=>controller.showModal3(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Obx(() => Text(controller.RoomType.value)),
+                        Icon(Icons.arrow_drop_down),
+                      ],
+                    ),
+                  ): InkWell(
+                    onTap:()=>controller.showModal4(context),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Obx(() => Text(controller.RateType.value)),
+
+                          Icon(Icons.arrow_drop_down),
+
+                      ],
+                    ),
+                  ),
+                ),
+              )
       ],
     );
   }
@@ -425,60 +490,54 @@ class GuestInfoRow extends StatelessWidget {
   }
 }
 
-Container buildBookingTypeObxContainer(
-    QuickBookingController controller,
-    String bookingType,
+Obx buildBookingTypeObxContainer(
+  QuickBookingController controller,
+  String bookingType,
+  int value,
+  double topLeft,
+  double topRight,
+  double bottomLeft,
+  double bottomRight,
+  String type,
+) {
+  return Obx(() {
+    bool isSelected = (type == 'BookingType')
+        ? (controller.BookingType.value == value)
+        : (controller.GuestType.value == value);
 
-    int value,
-    double leftPadding,
-    double rightPadding,
-    double topPadding,
-    double bottomPadding,
-    String type,
-    ) {
-  return Container(
-    padding: EdgeInsets.only(
-      left: leftPadding,
-      right: rightPadding,
-      top: topPadding,
-      bottom: bottomPadding,
-    ),
-    child: Obx(() {
-      bool isSelected = (type == 'BookingType')
-          ? (controller.BookingType.value == value)
-          : (controller.GuestType.value == value);
-
-      return InkWell(
-        onTap: () {
-          if (type == 'BookingType') {
-            controller.BookingType.value = value;
-          } else {
-            controller.GuestType.value = value;
-          }
-        },
-        child: Container(
-          width: 90,
-          decoration: BoxDecoration(
-            color: isSelected ? Colors.blue : Colors.white,
-            border: Border.all(
-              color: isSelected ? Colors.blue : Colors.grey,
-            ),
-            borderRadius: BorderRadius.circular(5),
+    return InkWell(
+      onTap: () {
+        if (type == 'BookingType') {
+          controller.BookingType.value = value;
+        } else {
+          controller.GuestType.value = value;
+        }
+      },
+      child: Container(
+        // width: 90,
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.blue : Colors.white,
+          border: Border.all(
+            color: isSelected ? Colors.blue : Colors.grey,
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Text(
-                bookingType,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.black,
-                ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(topLeft),
+              topRight: Radius.circular(topRight),
+              bottomLeft: Radius.circular(bottomLeft),
+              bottomRight: Radius.circular(bottomRight)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              bookingType,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.black,
               ),
             ),
           ),
         ),
-      );
-    }),
-  );
+      ),
+    );
+  });
 }
-

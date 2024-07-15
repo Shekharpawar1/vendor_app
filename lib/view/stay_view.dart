@@ -15,17 +15,6 @@ class RoomAvailabilityScreen extends StatelessWidget {
         centerTitle: true,
         // leading: InkWell(onTap:()=>Get.back(),child: Icon(Icons.arrow_back_ios_new,color:Colors.white)),
         title:  Text("Stay View",style:Text1),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () => print("Sort button pressed"), // Handle sort button tap
-        //     icon: Icon(Icons.sort),
-        //   ),
-        //   IconButton(
-        //     onPressed: () => print("Filter button pressed"), // Handle filter button tap
-        //     icon: Icon(Icons.filter_list),
-        //   ),
-        // ],
-
       ),
       body: Column(
         children: [
@@ -135,7 +124,6 @@ class RoomAvailabilityScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(child: Text(roomType)),
-
                   for (var i = 0; i < availability.length; i++)
                     Expanded(
                       child: Center(

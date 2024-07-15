@@ -2,12 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:simple_progress_indicators/simple_progress_indicators.dart';
 
 import '../../CommonWidgets/ProgressbarWidget.dart';
 import '../../helper/styles.dart';
 import '../../main.dart';
-import '../../routes/appRoutes.dart';
 import 'chipContainer.dart';
 import 'countoccupancycard.dart';
 
@@ -46,7 +44,6 @@ SliverToBoxAdapter bookingCounterbyChannel() {
         ),
       ));
 }
-
 SliverToBoxAdapter CritiqueContainer(controller) {
   return SliverToBoxAdapter(
       child: InkWell(
@@ -171,7 +168,6 @@ SliverToBoxAdapter CritiqueContainer(controller) {
         ),
       ));
 }
-
 SliverToBoxAdapter inventoryContainer() {
   return SliverToBoxAdapter(
       child: Padding(
@@ -210,9 +206,7 @@ SliverToBoxAdapter inventoryContainer() {
         ),
       ));
 }
-
 SliverToBoxAdapter countContainer(controller) => buildSliverToBoxAdapter(true, 'Counts', 'Occupancy', controller.item);
-
 Widget _buildRow(String title, String value) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),

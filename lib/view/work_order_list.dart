@@ -133,6 +133,7 @@ class _WorkOrderListState extends State<WorkOrderList> with SingleTickerProvider
   }
   showAlertBox(context,_formKey) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -268,18 +269,24 @@ class _WorkOrderListState extends State<WorkOrderList> with SingleTickerProvider
             ),
           ),
           actions: <Widget>[
-
             ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Process form data
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Processing Data')),
-                    );
-                  }
-                },
-                child: Text('Submit'),
-              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            SizedBox(width: 20,),
+            ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // Process form data
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Processing Data')),
+                  );
+                }
+              },
+              child: Text('Submit'),
+            ),
 
           ],
         );

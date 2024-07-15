@@ -4,10 +4,10 @@ import 'package:fun_n_food_vendor/helper/colors.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:pie_chart/pie_chart.dart';
-import '../CommonWidgets/appbarwidget.dart';
-import '../controller/critiquedashboardcontroller.dart';
-import '../helper/styles.dart';
-import '../main.dart';
+import '../../CommonWidgets/appbarwidget.dart';
+import '../../controller/critiquedashboardcontroller.dart';
+import '../../helper/styles.dart';
+import '../../main.dart';
 
 class CritiqueDashboard extends GetView<Critiquedashboardcontroller> {
   @override

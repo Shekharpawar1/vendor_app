@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fun_n_food_vendor/helper/colors.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class QuickBookingController extends GetxController {
@@ -10,6 +11,8 @@ class QuickBookingController extends GetxController {
   RxString CheckInTime = '12:00:00'.obs;
   RxString TotalNights = '0'.obs;
   RxString totalRooms = '1'.obs;
+  RxString RoomType='Select Room Type'.obs;
+  RxString RateType='Select Rate Type'.obs;
   RxInt isSelected = 1.obs;
   RxInt BookingType=1.obs;
   RxInt GuestType = 1.obs;
@@ -43,7 +46,9 @@ class QuickBookingController extends GetxController {
     if (picked != null && picked != now) {
       "${picked}".split('.')[0];
       print("picked checkout ${"${picked}".split(' ')[0]}");
-      CheckOutDate.value = picked.toString().split(" ")[0];
+      final DateFormat formatter = DateFormat('dd/MM/yyyy');
+      final String formattedDate = formatter.format(picked);
+      CheckOutDate.value = formattedDate;
       //  updateDate(picked, type, context);
       // dateController.text = "${picked.toLocal()}".split(' ')[0];
     }
@@ -65,7 +70,9 @@ class QuickBookingController extends GetxController {
 
   updateDate(value, type, context) {
     if (type == 'checkin') {
-      CheckInDate.value = value.toString().split(" ")[0];
+      final DateFormat formatter = DateFormat('dd/MM/yyyy');
+      final String formattedDate = formatter.format(value);
+      CheckInDate.value = formattedDate;
       selectTime(context);
       // update();
     } else {
@@ -137,7 +144,7 @@ class QuickBookingController extends GetxController {
       },
     );
   }
-
+  RxBool isSwitchOn=false.obs;
   showModal2(context){
     showModalBottomSheet(
         context: context,
@@ -185,5 +192,108 @@ class QuickBookingController extends GetxController {
         ),
       );
     });
+  }
+
+
+
+  List RoomTypeList=["shekahr"];
+  ////room Type modal
+  showModal3(context){
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 256
+                .h, // Adjust the height as needed
+            child: GridView.builder(
+              gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                4, // Adjust this value for the desired number of columns
+                mainAxisSpacing:
+                5.0, // Spacing between rows
+                crossAxisSpacing:
+                5.0, // Spacing between columns
+              ),
+              itemCount: RoomTypeList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  // Use InkWell for tap functionality
+                  onTap: () {
+                    RoomType.value=RoomTypeList[index];
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius:
+                          BorderRadius
+                              .circular(10)),
+                      // padding: EdgeInsets.all(
+                      //     8.0), // Padding around the content
+                      child: Center(
+                        child: Text(
+                            '${RoomTypeList[index]}'),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
+  }
+
+  List RateTypeList=["shekhar"];
+
+  ///RAte type modal
+  showModal4(context){
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 256
+                .h, // Adjust the height as needed
+            child: GridView.builder(
+              gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:
+                4, // Adjust this value for the desired number of columns
+                mainAxisSpacing:
+                5.0, // Spacing between rows
+                crossAxisSpacing:
+                5.0, // Spacing between columns
+              ),
+              itemCount: RateTypeList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  // Use InkWell for tap functionality
+                  onTap: () {
+                    RateType.value=RateTypeList[index];
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 100,
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius:
+                          BorderRadius
+                              .circular(10)),
+
+                      child: Center(
+                          child: Text(
+                              '${RateTypeList[index]}')),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        });
   }
 }
