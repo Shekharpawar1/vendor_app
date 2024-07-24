@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_n_food_vendor/controller/bottomController.dart';
-import 'package:fun_n_food_vendor/view/BookingList/bookingList.dart';
 import 'package:get/get.dart';
-
-import '../view/BottomNav.dart';
-import '../view/work_order_list.dart';
+import 'package:get_storage/get_storage.dart';
+import '../features/bookingList/view/bookingList.dart';
+import '../features/home/view/BottomNav.dart';
+import '../features/work_order_list.dart';
 
 class Settingcontroller extends GetxController {
+   // BottomNavController btmController=Get.find(BottomNavController());
+  // BottomNavController _bottomNavController = Get.put(BottomNavController());
 
   @override
   void onInit() {
+    // BottomNavController btmController=Get.put(BottomNavController());
     super.onInit();
     // Initialize logic here
   }
@@ -20,8 +22,8 @@ class Settingcontroller extends GetxController {
       name: 'Dashboard',
       icon: Icons.dashboard_outlined,
       onTap: () {
-        Get.find<BottomNavController>().selectedIndex.value = 0;
-        Get.off(MainPage()); // Example usage of passing index to MainPage
+
+        Get.off(MainPage(index:0)); // Example usage of passing index to MainPage
       },
     ),
     PageList(
@@ -63,16 +65,14 @@ class Settingcontroller extends GetxController {
       name: 'Quick View',
       icon: Icons.visibility_outlined,
       onTap: () {
-        Get.find<BottomNavController>().selectedIndex.value = 4;
-        Get.off(MainPage()); // Example usage of passing index to MainPage
+        Get.off(MainPage(index:4)); // Example usage of passing index to MainPage
       },
     ),
     PageList(
       name: 'Stay View',
       icon: Icons.calendar_today,
       onTap: () {
-        Get.find<BottomNavController>().selectedIndex.value = 1;
-        Get.off(MainPage()); // Example usage of passing index to MainPage
+        Get.off(MainPage(index:1));// Example usage of passing index to MainPage
       },
     ),
     PageList(
@@ -139,11 +139,16 @@ class Settingcontroller extends GetxController {
       name: 'Logout',
       icon: Icons.logout,
       onTap: () {
+       GetStorage().erase();
         Get.offAllNamed("/login");
       },
     ),
   ];
 
+
+  void onClose(){
+    super.onClose();
+  }
 }
 
 class PageList {

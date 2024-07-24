@@ -1,6 +1,7 @@
-import 'package:fun_n_food_vendor/helper/images.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+
+import '../../utils/helper/images.dart';
 
 class ReviewListController extends GetxController{
 

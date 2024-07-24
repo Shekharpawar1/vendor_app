@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../controller/booking_list_controller.dart';
+import '../features/bookingList/controller/booking_list_controller.dart';
 
 class BookingListBinding extends Bindings{
   @override

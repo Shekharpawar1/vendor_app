@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_n_food_vendor/helper/styles.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import '../utils/helper/styles.dart';
 
 class AddGuestController extends GetxController{
   final TextEditingController Salutation=TextEditingController();

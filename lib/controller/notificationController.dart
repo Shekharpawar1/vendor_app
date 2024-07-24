@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
-
-import '../helper/images.dart';
+import '../utils/helper/images.dart';
 
 class NotificationController extends GetxController{
 
