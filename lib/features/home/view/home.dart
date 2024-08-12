@@ -3,7 +3,7 @@ import 'package:fun_n_food_vendor/CommonWidgets/view/custom_refersh_indicator.da
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:score_progress_pretty_display/score_progress_pretty_display.dart';
-
+import 'package:shimmer/shimmer.dart';
 import '../../../CommonWidgets/view/ProgressbarWidget.dart';
 import '../../../CommonWidgets/view/appbarbottom.dart';
 import '../../../CommonWidgets/view/commonSliverGrid.dart';
@@ -53,12 +53,6 @@ class HomeScreen extends GetView<Homecontroller> {
             ),
             _buildAppBarBottomSection(),
             SliverToBoxAdapter(child: SizedBox(height: 8.0)),
-            // controller.isLoading.value?
-            // Center(
-            //   child: CircularProgressIndicator(
-            //     color: primaryColor,
-            //   ),
-            // )
             CommonGrid(controller: controller),
             SliverToBoxAdapter(child: SizedBox(height: 8.0)),
             SliverToBoxAdapter(child: SizedBox(height: 16.0)),
@@ -75,7 +69,12 @@ class HomeScreen extends GetView<Homecontroller> {
       ),
     );
   }
+  Future<void> _refreshData() async {
+    // Implement your refresh logic here, e.g., fetch new data from API
+    await controller.fetchData();
+  }
 
+  ///First widget
   SliverPersistentHeader _buildAppBarBottomSection() {
     return SliverPersistentHeader(
       pinned: false,
@@ -87,50 +86,256 @@ class HomeScreen extends GetView<Homecontroller> {
           child: Container(
             decoration: _boxDecoration(),
             child: Obx(() {
-              final widgetData = controller.bookingData['widget'] ?? {};
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppBarBottom(
-                    title: language.lblBottomAppBar1,
-                    content: (widgetData['pending_checkin'] ?? 0).toString(),
-                    content2: (widgetData['today_booked'] ?? 0).toString(),
-                    style: Text3,
-                  ),
-                  const VerticalDivider(),
-                  AppBarBottom(
-                    title: language.lblBottomAppBar2,
-                    content: (widgetData['upcoming_checkout'] ?? 0).toString(),
-                    content2: (widgetData['delayed_checkout'] ?? 0).toString(),
-                    style: Text4,
-                  ),
-                  const VerticalDivider(),
-                  AppBarBottom(
-                    title: language.lblBottomAppBar3,
-                    content: (widgetData['total'] ?? 0).toString(),
-                    style: Text5,
-                  ),
-                  const VerticalDivider(),
-                  AppBarBottom(
-                    title: language.lblBottomAppBar4,
-                    content: '0', // This value is already a string, so no conversion needed
-                    style: Text6,
-                  ),
-                ],
-              );
+              if (controller.isLoading.value) {
+                // Show shimmer effect while loading
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: _buildShimmerPlaceholder(),
+                    ),
+                    const VerticalDivider(),
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: _buildShimmerPlaceholder(),
+                    ),
+                    const VerticalDivider(),
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: _buildShimmerPlaceholder(),
+                    ),
+                    const VerticalDivider(),
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: _buildShimmerPlaceholder(),
+                    ),
+                  ],
+                );
+              } else {
+                final dashboardData = controller.bookingData.value;
+                if (dashboardData != null) {
+                  final widgetData = dashboardData.widget;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppBarBottom(
+                        title: language.lblBottomAppBar1,
+                        content: widgetData.pendingCheckin?.toString() ?? '0',
+                        content2: widgetData.todayCheckout?.toString() ?? '0',
+                        style: Text3,
+                      ),
+                      const VerticalDivider(),
+                      AppBarBottom(
+                        title: language.lblBottomAppBar2,
+                        content: widgetData.todayCheckout?.toString() ?? '0',
+                        content2: widgetData.delayedCheckout?.toString() ?? '0',
+                        style: Text4,
+                      ),
+                      const VerticalDivider(),
+                      AppBarBottom(
+                        title: language.lblBottomAppBar3,
+                        content: widgetData.total?.toString() ?? '0',
+                        style: Text5,
+                      ),
+                      const VerticalDivider(),
+                      AppBarBottom(
+                        title: language.lblBottomAppBar4,
+                        content: '0', // Example static value
+                        style: Text6,
+                      ),
+                    ],
+                  );
+                } else {
+                  // Handle case when data is null
+                  return Center(child: Text("No data available"));
+                }
+              }
             }),
           ),
-
         ),
       ),
     );
   }
 
-  Future<void> _refreshData() async {
-    // Implement your refresh logic here, e.g., fetch new data from API
-    await controller.fetchData();
+  Widget _buildShimmerPlaceholder() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 50,
+          height: 10,
+          color: Colors.grey,
+        ),
+        SizedBox(height: 8),
+        Container(
+          width: 30,
+          height: 10,
+          color: Colors.grey,
+        ),
+      ],
+    );
   }
+
+
+  ///Count and Occupancy
+  SliverToBoxAdapter _buildCountContainer() {
+    return buildSliverToBoxAdapter(
+      true,
+      'Counts',
+      'Occupancy'
+    );
+  }
+
+
+  SliverToBoxAdapter _buildInventoryContainer() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Obx(() {
+          // Check if data is still loading
+          if (controller.isLoading.value) {
+            return _buildShimmerEffect(); // Display shimmer effect while loading
+          } else {
+            final dashboardData = controller.bookingData.value;
+            if (dashboardData != null) {
+              final widgetData = dashboardData.widget;
+
+              final todayAvailable = double.tryParse(widgetData.todayAvailable.toString()) ?? 0;
+              final todayBooked = double.tryParse(widgetData.todayBooked.toString()) ?? 0;
+              final todayBlocked = double.tryParse(widgetData.todayBlocked.toString()) ?? 0;
+              final totalRoom = double.tryParse(widgetData.totalRoom.toString()) ?? 0;
+
+              double value1 = totalRoom != 0 ? todayAvailable / totalRoom : 0;
+              double value2 = totalRoom != 0 ? todayBooked / totalRoom : 0;
+              double value3 = totalRoom != 0 ? todayBlocked / totalRoom : 0;
+
+              return Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        language.Hometitle1,
+                        style: Text4,
+                      ),
+                    ),
+                    Container(
+                      decoration: boxDecoration1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildRow(language.HomeTitle1content1, widgetData.todayAvailable.toString(), value1),
+                            SizedBox(height: 16.0),
+                            _buildRow(language.HomeTitle1content2, widgetData.todayBooked.toString(), value2),
+                            SizedBox(height: 16.0),
+                            _buildRow(language.HomeTitle1content3, widgetData.todayBlocked.toString(), value3),
+                            SizedBox(height: 16.0),
+                            _buildRow(language.HomeTitle1content4, "200", 0.05),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Center(child: Text("No data available"));
+            }
+          }
+        }),
+      ),
+    );
+  }
+
+  Widget _buildRow(String title, String data, double value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: Text7,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(width: 16.0),
+          Expanded(
+            flex: 2,
+            child: ProgressBarWidget(value: value),
+          ),
+          SizedBox(width: 16.0),
+          Expanded(
+            child: Text(
+              data,
+              style: Text4,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildShimmerEffect() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: List.generate(4, (index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Container(
+              height: 20.0,
+              decoration: _boxDecoration(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 20.0,
+                      color: Colors.grey[200], // Use a color that blends with the shimmer
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      height: 20.0,
+                      color: Colors.grey[200], // Use a color that blends with the shimmer
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: Container(
+                      height: 20.0,
+                      color: Colors.grey[200], // Use a color that blends with the shimmer
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+
+
+
+
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
@@ -161,55 +366,6 @@ class HomeScreen extends GetView<Homecontroller> {
         ),
       ],
       color: Colors.white,
-    );
-  }
-
-  SliverToBoxAdapter _buildCountContainer() {
-    return buildSliverToBoxAdapter(
-      true,
-      'Counts',
-      'Occupancy',
-      controller.item,
-    );
-  }
-
-  SliverToBoxAdapter _buildInventoryContainer() {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  language.Hometitle1,
-                  style: Text4,
-                ),
-              ),
-              Container(
-                decoration: boxDecoration1,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildRow(language.HomeTitle1content1, "200"),
-                      SizedBox(height: 16.0),
-                      _buildRow(language.HomeTitle1content2, "200"),
-                      SizedBox(height: 16.0),
-                      _buildRow(language.HomeTitle1content3, "200"),
-                      SizedBox(height: 16.0),
-                      _buildRow(language.HomeTitle1content4, "200"),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -377,36 +533,6 @@ class HomeScreen extends GetView<Homecontroller> {
     );
   }
 
-  Widget _buildRow(String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: Text7,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(width: 16.0),
-          Expanded(
-            flex: 2,
-            child: ProgressBarWidget(value: .5),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: Text4,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Chip buildChip(String title, String count) {
     return Chip(
       shape: RoundedRectangleBorder(
@@ -454,21 +580,20 @@ class HomeScreen extends GetView<Homecontroller> {
       bool isProgress,
       String title,
       String title1,
-      List list,
       ) {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          width: 100.w,
-          height: 30.h,
-          padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+          width: double.infinity,
+          height: 25.h, // Ensure that 25.h is a valid extension, else replace it with a proper height value.
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           decoration: _boxDecoration(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Use spaceBetween for even spacing between title and title1
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
@@ -484,95 +609,220 @@ class HomeScreen extends GetView<Homecontroller> {
                   ),
                 ],
               ),
+              const SizedBox(height: 8.0),
               Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: list.length,
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Obx(() {
+                  if (controller.isLoading.value) {
+                    // Show shimmer effect while loading
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                _buildShimmerPlaceholder2(),
+                                const SizedBox(height: 8.0),
+                                _buildShimmerPlaceholder2(),
+                                const SizedBox(height: 8.0),
+                                _buildShimmerPlaceholder2(),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const VerticalDivider(),
+                        Expanded(
+                          child: Center(
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
+                                width: 140,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    final dashboardData = controller.bookingData.value;
+                    if (dashboardData != null) {
+                      final widgetData = dashboardData.widget;
+                      return Row(
+                        children: [
+                          Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
                                 children: [
-                                  Flexible(
-                                    child: Text(
-                                      list[index].title,
-                                      textAlign: TextAlign.left,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.0),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(100),
-                                      color: Colors.blue.withOpacity(0.5),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        list[index].count.toString(),
+                                  // First row
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: Text(
+                                          'Void',
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                    ),
+                                      const SizedBox(width: 12.0),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.blue.withOpacity(0.5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            widgetData.todayVoidBooking?.toString() ?? '0',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  // Second row
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: Text(
+                                          'Cancelled',
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12.0),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.blue.withOpacity(0.5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            widgetData.todayCanceledBooking?.toString() ?? '0',
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  // Third row
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Flexible(
+                                        child: Text(
+                                          'No show',
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12.0),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(100),
+                                          color: Colors.blue.withOpacity(0.5),
+                                        ),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            '0', // Static value
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    VerticalDivider(),
-                    Container(
-                      child: Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (isProgress)
-                              PrimaryArcAnimationComponent(
-                                score: 5,
-                                maxScore: 100,
-                                arcHeight: 140,
-                                arcWidth: 140,
-                                backgroundArcStrokeThickness: 5,
-                                progressArcStrokeThickness: 4,
-                                isRoundEdges: true,
-                                minScoreTextFontSize: 30,
-                                maxScoreTextFontSize: 50,
-                                isRoundOffScoreWhileProgress: true,
-                                showOutOfScoreFormat: false,
-                                scoreAnimationDuration: Duration(seconds: 2),
-                                scoreTextAnimationDuration:
-                                Duration(milliseconds: 500),
-                                arcBackgroundColor: Colors.black12,
-                                arcProgressGradientColors: [
-                                  Color(0xFFF82735),
-                                  Color(0xFFFB8C00),
-                                  Color(0xFFFCC300),
-                                  Color(0xFF229D57),
-                                ],
-                              )
-                            else
-                              Text("shekhar"),
-                            SizedBox(height: 8.0),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                          ),
+                          const VerticalDivider(),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (isProgress)
+                                  PrimaryArcAnimationComponent(
+                                    score: double.tryParse(widgetData.todayBooked?.toString() ?? '0') ?? 0.0,
+                                    maxScore: double.tryParse(widgetData.totalRoom?.toString() ?? '0') ?? 0.0,
+                                    arcHeight: 140,
+                                    arcWidth: 140,
+                                    backgroundArcStrokeThickness: 5,
+                                    progressArcStrokeThickness: 4,
+                                    isRoundEdges: true,
+                                    minScoreTextFontSize: 30,
+                                    maxScoreTextFontSize: 50,
+                                    isRoundOffScoreWhileProgress: true,
+                                    showOutOfScoreFormat: false,
+                                    scoreAnimationDuration: const Duration(seconds: 2),
+                                    scoreTextAnimationDuration: const Duration(milliseconds: 500),
+                                    arcBackgroundColor: Colors.black12,
+                                    arcProgressGradientColors: const [
+                                      Color(0xFFF82735),
+                                      Color(0xFFFB8C00),
+                                      Color(0xFFFCC300),
+                                      Color(0xFF229D57),
+                                    ],
+                                  )
+                                else
+                                  const Text("shekhar"),
+                                const SizedBox(height: 8.0),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      // Handle case when data is null
+                      return const Center(child: Text("No data available"));
+                    }
+                  }
+                }),
+              )
             ],
           ),
         ),
       ),
     );
+
   }
+
+// Function to build shimmer placeholder widget
+  Widget _buildShimmerPlaceholder2() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Container(
+              width: 80,
+              height: 20,
+              color: Colors.grey,
+            ),
+          ),
+          SizedBox(width: 12.0),
+          Container(
+            width: 50,
+            height: 20,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }

@@ -57,101 +57,6 @@ class BookingListController extends GetxController {
     }
   }
 
-  showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Edit Guest Profile'),
-                onTap: () {
-                  Get.toNamed("/editGuestInfo");
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.remove_red_eye),
-                title: Text('View Reservation'),
-                onTap: () {
-                  Get.to(() => BookingDetails());
-                  print("getting called");
-                  // Get.toNamed("/bookingDetails");
-                  // Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.history),
-                title: Text('Audit Trail'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Edit guest profile'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.block),
-                title: Text('Mark No Show'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.hotel),
-                title: Text('Assign Room'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.swap_horiz),
-                title: Text('Amend Stay'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.cancel),
-                title: Text('Void Transaction'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.print),
-                title: Text('Print Invoice'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.close),
-                title: Text('Close'),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Add your onTap code here
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   ///API'S
   var isLoading = false.obs;
@@ -195,7 +100,6 @@ class BookingListController extends GetxController {
           return {
             'id': item['id'],
             'booking_number': item['booking_number'],
-            'time': item['checked_in_at'],
             'check_in': item['check_in'],
             'check_out': item['check_out'],
             'contact_info': {
@@ -233,6 +137,42 @@ class BookingListController extends GetxController {
               'email': item['guest']['email'],
               'address': item['guest']['address'],
             } : null,
+            'booked_rooms': item['booked_rooms'].map((room) {
+              return {
+                'id': room['id'],
+                'room_number': room['room_number'],
+                'booked_for': room['booked_for'],
+                'fare': room['fare'],
+                'discount': room['discount'],
+                'tax_charge': room['tax_charge'],
+                'cancellation_fee': room['cancellation_fee'],
+                'room': room['room'] != null ? {
+                  'id': room['room']['id'],
+                  'room_number': room['room']['room_number'],
+                  'status': room['room']['status'],
+                  'created_at': room['room']['created_at'],
+                  'updated_at': room['room']['updated_at'],
+                } : null,
+                'room_type': room['room_type'] != null ? {
+                  'id': room['room_type']['id'],
+                  'name': room['room_type']['name'],
+                  'total_adult': room['room_type']['total_adult'],
+                  'total_child': room['room_type']['total_child'],
+                  'fare': room['room_type']['fare'],
+                  'discount_percentage': room['room_type']['discount_percentage'],
+                  'description': room['room_type']['description'],
+                  'beds': List<String>.from(room['room_type']['beds']),
+                  'cancellation_fee': room['room_type']['cancellation_fee'],
+                  'cancellation_policy': room['room_type']['cancellation_policy'],
+                  'is_featured': room['room_type']['is_featured'],
+                  'status': room['room_type']['status'],
+                  'image': room['room_type']['image'],
+                  'discounted_fare': room['room_type']['discounted_fare'],
+                  'discount': room['room_type']['discount'],
+                  'images': room['room_type']['images'] != null ? List<Map<String, dynamic>>.from(room['room_type']['images']) : null,
+                } : null,
+              };
+            }).toList(),
           };
         }).toList());
 
@@ -247,6 +187,7 @@ class BookingListController extends GetxController {
       isLoading.value = false;
     }
   }
+
 
   Future<void> getTodayDepartureInfo() async {
     try {

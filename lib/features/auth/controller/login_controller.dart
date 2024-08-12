@@ -39,7 +39,7 @@ class LoginController extends GetxController {
 
   var isLoading = false.obs;
   late LoginModel loginModel;
-  loginUser() async {
+  Future<void> loginUser() async {
     isLoading.value = true;
     try {
       Map<String, String> data = {
@@ -53,18 +53,23 @@ class LoginController extends GetxController {
 
       print('Status Code ---> ${response.statusCode}');
       print('Data ---> ${jsonEncode(data)}');
-      print('Status Code ---> ${response.body}');
-      print('Data ---> ${jsonEncode(data)}');
+      print('Response Body ---> ${response.body}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final decodedData = jsonDecode(response.body);
         loginModel = LoginModel.fromJson(decodedData);
+
+        // Store data in box
         box.write("userData", decodedData['data']);
 
         // Store token
         String? token = loginModel.data?.accessToken;
+        String? id = loginModel.data?.user?.id.toString(); // Make sure id is converted to String if needed
         if (token != null) {
           box.write("access_token", token);
+        }
+        if (id != null) {
+          box.write("user_id", id); // Changed to "user_id" to distinguish from access token
         }
         Get.offAllNamed("/bottomNav");
       } else {
@@ -77,9 +82,8 @@ class LoginController extends GetxController {
         Get.snackbar("Alert", "Something went wrong!!", snackPosition: SnackPosition.BOTTOM);
       });
     } finally {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.snackbar("Alert", "Something went wrong!!", snackPosition: SnackPosition.BOTTOM);
-      });
+      isLoading.value = false; // Set loading to false in the finally block
     }
   }
+
 }

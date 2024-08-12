@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'dart:js_interop_unsafe';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fun_n_food_vendor/utils/helper/api_helper.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../../utils/helper/styles.dart';
+import '../model/audit_trail_model.dart';
+import '../model/booking_detail_model.dart';
 class CommonAppBar2Controller extends GetxController {
 
   /// General Info Part
@@ -16,9 +17,17 @@ class CommonAppBar2Controller extends GetxController {
   var arrivalDate = DateTime.now().obs;
   var departureDate = (DateTime.now().add(Duration(days: 1))).obs;
 
+  CommonAppBar2Controller(String id, String bookingNum){
+    bookingId.value = id;
+    bookingNumber.value = bookingNum;
+  }
+
   @override
   void onInit() {
     super.onInit();
+    getInfo();
+    getAuditTrailInfo();
+
     // Initialize formattedDate with today's date
     arrivalDate.value = DateTime.now();
     departureDate.value = DateTime.now().add(Duration(days: 1));
@@ -62,24 +71,8 @@ class CommonAppBar2Controller extends GetxController {
 
   var isExpanded = false.obs;
 
-  // List of charges
-  final List<Map<String, String>> charges = [
-    {'title': 'Room Charges', 'price': '\$25,000'},
-    {'title': 'Discount', 'price': '\$0'},
-    {'title': 'Tax', 'price': '\$3,750'},
-    {'title': 'Extra Charges', 'price': '\$3,000'},
-    {'title': 'Unposted Inclusion Rate', 'price': '\$0'},
-    {'title': 'Balance Transfer', 'price': '\$0'},
-    {'title': 'Amount Paid', 'price': '\$0'},
-    {'title': 'Round Off', 'price': '\$0'},
-  ];
-
-
   final Formkey=GlobalKey<FormState>();
   final Formkey2=GlobalKey<FormState>();
-
-
-
 
   showAlertBox(context) {
     showDialog(
@@ -202,58 +195,8 @@ class CommonAppBar2Controller extends GetxController {
     );
   }
 
-  String get total => '\$31,750';
-  TextEditingController ResController=TextEditingController();
-  TextEditingController DateController=TextEditingController();
-  TextEditingController FolioController=TextEditingController();
-  TextEditingController MasterTypeController=TextEditingController();
-  TextEditingController MasterController=TextEditingController();
-  TextEditingController AmountController=TextEditingController();
-  TextEditingController commentController=TextEditingController();
-  TextEditingController QuantityController=TextEditingController();
-  TextEditingController DiscountController=TextEditingController();
-  TextEditingController TaxInclusiveController=TextEditingController();
-
-  showPaymentModal(BuildContext context) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return PaymentModal(
-          resController: ResController,
-          dateController: DateController,
-          folioController: FolioController,
-          masterTypeController: MasterTypeController,
-          masterController: MasterController,
-          amountController: AmountController,
-          commentController: commentController, Formkey: Formkey,
-        );
-      },
-    );
-  }
-  final FormKey3=GlobalKey<FormState>();
-  showExtraChargeModal(BuildContext context){
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return ExtraChargesModal(
-          resController: ResController,
-          dateController: DateController,
-          folioController: FolioController,
-          masterTypeController: MasterTypeController,
-          quantityController:QuantityController,
-          DiscountController:DiscountController,
-          TaxInclusiveController:TaxInclusiveController,
-          masterController: MasterController,
-          amountController: AmountController,
-          commentController: commentController, Formkey: FormKey3,
-        );
-      },
-    );
-  }
-/// Guest Info Part
-void onClose(){
+  /// Guest Info Part
+  void onClose(){
     Formkey.currentState?.dispose();
     super.onClose();
 }
@@ -319,67 +262,202 @@ void onClose(){
   ///API CALLING
   var isLoading = false.obs;
   final box = GetStorage();
-  RxList<dynamic> generalInfo = <dynamic>[].obs;
+  var bookingId = ''.obs;
+  RxString bookingNumber = '0'.obs;
+  RxList generalInfo = [].obs;
+  RxList bookedRoomInfo = [].obs;
+  RxList roomTypeInfo = [].obs;
+  RxList paymentInfo =[].obs;
+  var auditTrailList = <AuditTrail>[].obs;
 
   Future<void> getInfo() async {
     try {
       isLoading.value = true;
       final String? token = box.read('access_token');
-      final url = '${bookingDetail}';
+      final url = '${bookingDetail}/${bookingId.value}';
+      print('URL: $url');
       final response = await http.get(
         Uri.parse(url),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      print('Status Code:-- ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        print('Status --> ${responseBody['status']}');
+        print('Response Body: ${response.body}');
+
+        if (responseBody['status'] == 'success') {
+          // Extract booking details with null checks
+          final bookingData = responseBody['data']?['booking'];
+          final bookedRoomsData = responseBody['data']?['bookedRooms']?['date'];
+          final paymentInfoData = responseBody['data']?['paymentInfo'];
+          final contactData = bookingData?['contact_info'];
+          final guestData = bookingData?['guest'];
+
+          if (bookingData != null) {
+            // Map booking data
+            // bookingNumber.value = bookingData['booking_number'].toString();
+            generalInfo.value = [
+              {
+                'id': bookingData['id'],
+                'booking_number': bookingData['booking_number'].toString(),
+
+                'check_in': bookingData['check_in'],
+                'check_out': bookingData['check_out'],
+                'contact_info': {
+                  'name': contactData?['name'] ?? '',
+                  'phone': contactData?['phone'] ?? '',
+                },
+                'total_adult': bookingData['total_adult'],
+                'total_child': bookingData['total_child'],
+                'total_discount': bookingData['total_discount'],
+                'tax_charge': bookingData['tax_charge'],
+                'booking_fare': bookingData['booking_fare'],
+                'service_cost': bookingData['service_cost'],
+                'extra_charge': bookingData['extra_charge'],
+                'paid_amount': bookingData['paid_amount'],
+                'total_amount': bookingData['total_amount'],
+                'due_amount': bookingData['due_amount'],
+                'tax_percent': bookingData['tax_percent'],
+                'guest': {
+                  'id': guestData?['id'] ?? '',
+                  'name': guestData?['name'] ?? '',
+                  'mobile': guestData?['mobile'] ?? '',
+                  'email': guestData?['email'] ?? '',
+                  'address': guestData?['address'] ?? '',
+                }
+              }
+            ];
+
+          }
+
+          if (bookedRoomsData != null && bookedRoomsData is List) {
+            // Map booked rooms data
+            bookedRoomInfo.value = bookedRoomsData.map((room) {
+              return {
+                'id': room['id'],
+                'booking_id': room['booking_id'],
+                'room_type_id': room['room_type_id'],
+                'room_id': room['room_id'],
+                'room_number': room['room_number'],
+                'booked_for': room['booked_for'],
+                'fare': room['fare'],
+                'discount': room['discount'],
+                'tax_charge': room['tax_charge'],
+                'cancellation_fee': room['cancellation_fee'],
+                'status': room['status'],
+                'room': room['room'],
+                'room_type': room['room_type'],
+              };
+            }).toList();
+          }
+
+          if (paymentInfoData != null) {
+            // Map payment info data
+            paymentInfo.value = [
+              {
+                'subtotal': paymentInfoData['subtotal'],
+                'total_amount': paymentInfoData['total_amount'],
+                'canceled_fare': paymentInfoData['canceled_fare'],
+                'canceled_tax_charge': paymentInfoData['canceled_tax_charge'],
+                'payment_received': paymentInfoData['payment_received'],
+                'refunded': paymentInfoData['refunded'],
+              }
+            ];
+          }
+
+          print('Booking number--1---: ${bookingNumber.value}');
+        } else {
+          // Handle error or unexpected response format
+          print('API response status is not success');
+        }
+      } else if (response.statusCode == 401) {
+        GetStorage().erase();
+        Get.offAllNamed("/bottomNav");
+      }
+    } catch (e, stacktrace) {
+      print("Error: $e");
+      print("Stacktrace: $stacktrace");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> getAuditTrailInfo() async {
+    try {
+      print('.....GetAuditTrailInfo is called.....');
+      isLoading.value = true;
+      print('Booking number--2---: ${bookingNumber.value}');
+      final String? token = box.read('access_token');
+      final url = '${audioTrail}?booking_number=${bookingNumber.value}';
+      print('URL: $url');
+
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      print('Status Code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        print('Response Body: $responseBody');
+
+        // Debug individual parts
+        print('Booking Log: ${responseBody['booking_log']}');
+        print('Data: ${responseBody['booking_log']?['data']}');
+
+        // Parse the response body into the model
+        final bookingActionsModel = BookingActionsModel.fromJson(responseBody);
+
+        // Update the RxList with the parsed data
+        auditTrailList.value = bookingActionsModel.bookingLog.data;
+
+        print("Audit Trail List --> ${auditTrailList.value}");
+      } else if (response.statusCode == 401) {
+        GetStorage().erase();
+        Get.offAllNamed("/bottomNav");
+      } else {
+        print('Failed to load audit trail info. Status Code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+
+
+  Future<void> getExtraCharges() async {
+    try {
+      isLoading.value = true;
+
+      Map<String, String> data = {
+        // Add key-value pairs as needed
+      };
+
+      final String? token = box.read('access_token');
+      final String url = '${extraCharges}/${bookingId.value}';
+
+      // Send the request
+      final response = await http.post(
+        Uri.parse(url),
+        body: data,
         headers: {
           'Authorization': 'Bearer $token',
         },
       );
 
-      print('Status Code ---> ${response.statusCode}');
+
       if (response.statusCode == 200) {
-        final responseBody = jsonDecode(response.body);
-        print('Data = ${responseBody['data']}');
 
-        var data = responseBody['data']['booking'];
-
-        // Clear previous data
-        generalInfo.clear();
-
-        // Add mapped data to generalInfo
-        generalInfo.add({
-          'id': data['id'],
-          'booking_number': data['booking_number'],
-          'check_in': data['check_in'],
-          'check_out': data['check_out'],
-          'contact_info': {
-            'name': data['contact_info']['name'],
-            'phone': data['contact_info']['phone'],
-          },
-          'total_adult': data['total_adult'],
-          'total_child': data['total_child'],
-          'total_discount': data['total_discount'],
-          'tax_charge': data['tax_charge'],
-          'booking_fare': data['booking_fare'],
-          'service_cost': data['service_cost'],
-          'extra_charge': data['extra_charge'],
-          'paid_amount': data['paid_amount'],
-          'cancellation_fee': data['cancellation_fee'],
-          'refunded_amount': data['refunded_amount'],
-          'key_status': data['key_status'],
-          'status': data['status'],
-          'checked_in_at': data['checked_in_at'],
-          'checked_out_at': data['checked_out_at'],
-          'created_at': data['created_at'],
-          'updated_at': data['updated_at'],
-          'total_amount': data['total_amount'],
-          'due_amount': data['due_amount'],
-          'tax_percent': data['tax_percent'],
-          'used_extra_service': data['used_extra_service'],
-          'payments': data['payments'],
-          'booked_rooms': data['booked_rooms'],
-        });
-      } else if (response.statusCode == 401) {
-        GetStorage().erase();
-        Get.offAllNamed("/bottomNav");
+        final responseBody = json.decode(response.body);
+      } else {
+        print('Failed to fetch extra charges: ${response.statusCode}');
       }
+
     } catch (e) {
       print("Error: $e");
     } finally {
@@ -389,46 +467,7 @@ void onClose(){
 }
 
 
-class GuestInfoRow extends StatelessWidget {
-  final String label;
-  final TextEditingController TextController;
 
-
-  GuestInfoRow({
-    required this.label,
-    required this.TextController,
-
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("$label :"),
-        // if (_needsCustomHandler(label))
-        //   Expanded(
-        //     child: _buildCustomField(context),
-        //   )
-        // else
-          Expanded(
-            child: TextField(
-              controller: TextController,
-              decoration: InputDecoration(
-                hintText: 'Enter $label',
-                hintStyle: Text7,
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.all(12.0),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-
-
-
-}
 class ReservationTitles {
   final String title;
   final String subTitle1;
@@ -462,229 +501,4 @@ class Reservation {
     required this.dateTime,
     required this.someOtherInfo,
   });
-}
-class PaymentModal extends StatelessWidget {
-  final TextEditingController resController;
-  final TextEditingController dateController;
-  final TextEditingController folioController;
-  final TextEditingController masterTypeController;
-  final TextEditingController masterController;
-  final TextEditingController amountController;
-  final TextEditingController commentController;
-  final Formkey;
-
-  const PaymentModal({
-    Key? key,
-    required this.resController,
-    required this.dateController,
-    required this.folioController,
-    required this.masterTypeController,
-    required this.masterController,
-    required this.amountController,
-    required this.commentController,
-    required this.Formkey,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SingleChildScrollView(
-        child: Container(
-          width: double.maxFinite,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: EdgeInsets.all(12.0),
-                margin: EdgeInsets.only(bottom: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GuestInfoRow(label: 'Res / Vou no.', TextController: resController),
-                    const SizedBox(height: 8.0),
-                    GuestInfoRow(label: 'Date', TextController: dateController),
-                    SizedBox(height: 8.0),
-                    GuestInfoRow(label: 'Folio', TextController: folioController),
-                  ],
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: EdgeInsets.all(12.0),
-                margin: EdgeInsets.only(bottom: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GuestInfoRow(label: 'Master Type', TextController: masterTypeController),
-                    SizedBox(height: 8.0),
-                    GuestInfoRow(label: 'Master', TextController: masterController),
-                    SizedBox(height: 16.0),
-                    GuestInfoRow(label: 'Amount', TextController: amountController),
-                  ],
-                ),
-              ),
-              TextField(
-                controller: commentController,
-                maxLines: null, // Allows for multiline input
-                decoration: InputDecoration(
-                  hintText: 'Enter your comment here',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  contentPadding: EdgeInsets.all(12.0),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Cancel'),
-        ),
-        SizedBox(width: 20),
-        ElevatedButton(
-          onPressed: () {
-            if (Formkey.currentState!.validate()) {
-              Formkey.currentState?.dispose();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Processing Data')),
-              );
-              Navigator.pop(context); // Remove modal after processing
-            }
-          },
-          child: Text('Submit'),
-        ),
-      ],
-    );
-  }
-}
-class ExtraChargesModal extends StatelessWidget {
-  final TextEditingController resController;
-  final TextEditingController dateController;
-  final TextEditingController folioController;
-  final TextEditingController masterTypeController;
-  final TextEditingController masterController;
-  final TextEditingController amountController;
-  final TextEditingController commentController;
-  final TextEditingController quantityController;
-  final TextEditingController DiscountController;
-  final TextEditingController TaxInclusiveController;
-  final Formkey;
-
-  const ExtraChargesModal({
-    Key? key,
-    required this.resController,
-    required this.dateController,
-    required this.folioController,
-    required this.masterTypeController,
-    required this.masterController,
-    required this.amountController,
-    required this.commentController,
-    required this.Formkey, required this.quantityController, required this.DiscountController, required this.TaxInclusiveController,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SingleChildScrollView(
-        child: Container(
-          width: double.maxFinite,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: EdgeInsets.all(12.0),
-                margin: EdgeInsets.only(bottom: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GuestInfoRow(label: 'Res / Vou no.', TextController: resController),
-                    const SizedBox(height: 8.0),
-                    GuestInfoRow(label: 'Date', TextController: dateController),
-                    SizedBox(height: 8.0),
-                    GuestInfoRow(label: 'Folio', TextController: folioController),
-                  ],
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: EdgeInsets.all(12.0),
-                margin: EdgeInsets.only(bottom: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GuestInfoRow(label: 'Master Type', TextController: masterTypeController),
-                    SizedBox(height: 8.0),
-                    GuestInfoRow(label: 'Master', TextController: masterController),
-                    SizedBox(height: 16.0),
-                    GuestInfoRow(label: 'Qty', TextController: quantityController),
-                    SizedBox(height: 16.0),
-                    GuestInfoRow(label: 'Discount', TextController: DiscountController),
-                    SizedBox(height: 16.0),
-                    GuestInfoRow(label: 'Amount', TextController: amountController),
-                    SizedBox(height: 16.0),
-                    GuestInfoRow(label: 'Tax', TextController: TaxInclusiveController),
-                  ],
-                ),
-              ),
-              TextField(
-                controller: commentController,
-                maxLines: null, // Allows for multiline input
-                decoration: InputDecoration(
-                  hintText: 'Enter your comment here',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  contentPadding: EdgeInsets.all(12.0),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Cancel'),
-        ),
-        SizedBox(width: 20),
-        ElevatedButton(
-          onPressed: () {
-            if (Formkey.currentState!.validate()) {
-              Formkey.currentState?.dispose();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Processing Data')),
-              );
-              Navigator.pop(context); // Remove modal after processing
-            }
-          },
-          child: Text('Submit'),
-        ),
-      ],
-    );
-  }
 }

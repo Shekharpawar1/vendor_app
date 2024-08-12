@@ -23,6 +23,7 @@ final TextStyle Text12=TextStyle(color: Colors.grey,fontSize: 15,fontWeight: Fon
 final TextStyle Text13=TextStyle(color: Colors.black,fontSize: 15,fontWeight: FontWeight.w400,);
 final TextStyle Text14=TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w400,);
 final TextStyle Text15=TextStyle(color: Colors.grey,fontSize: 12,fontWeight: FontWeight.w400,);
+final TextStyle Text16=TextStyle(color: Colors.black,fontSize: 13,fontWeight: FontWeight.w400,);
 ////background decoration
 final BoxDecoration boxDecoration1=BoxDecoration(
   boxShadow: [

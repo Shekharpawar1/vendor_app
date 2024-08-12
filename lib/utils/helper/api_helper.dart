@@ -2,11 +2,13 @@ final  String Base_url='https://funresort.digiatto.online';
 
 final String API_V1_PATH = '/api/';
 
+final String BaseUrl = Base_url+API_V1_PATH;
 
-
-final String loginApi=Base_url+API_V1_PATH+"login";
-final String allBookingRequest=Base_url+API_V1_PATH+'booking/all-request';
+final String loginApi=BaseUrl+"login";
+final String allBookingRequest=BaseUrl+'booking/all-request';
 final String changeHotelStatusApi=Base_url+"";
+final String audioTrail = BaseUrl+'report/booking-actions';
+final String extraCharges = BaseUrl+'manage/add-charge';
 
 ///Booking list api
 final String booking = Base_url+API_V1_PATH+"booking/";

@@ -1,36 +1,34 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
+import 'package:get_storage/get_storage.dart';
 
 class SplashController extends GetxController {
   Timer? _timer;
-
+  final GetStorage box = GetStorage();
 
   @override
   void onInit() {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     super.onInit();
-    loadData();
+    _redirect();
   }
 
   @override
   void onReady() {
     super.onReady();
-    loadData();
+    _redirect(); // Automatically handle redirection after splash screen
   }
-
 
   Future<void> _redirect() async {
     _timer = Timer(
-      const Duration(milliseconds: 5000),
+      const Duration(milliseconds: 3000), // Adjusted duration if needed
           () async {
-
-        await Future.delayed(const Duration(milliseconds: 50));
-
-
+        final userId = box.read("user_id");
+        if (userId == null || userId.isEmpty) {
+          Get.offNamed("/login");
+        } else {
+          Get.offNamed("/bottomNav");
+        }
       },
     );
   }
@@ -38,32 +36,6 @@ class SplashController extends GetxController {
   @override
   void onClose() {
     _timer?.cancel();
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.blue));
     super.onClose();
-  }
-
-  Future<Timer> loadData() async {
-    return Timer(const Duration(milliseconds: 3000), onDoneLoading);
-  }
-
-  onDoneLoading() async {
-   // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // var userData=await prefs.getString('UserDetail');
-    // var userId=await prefs.getString('UserId');
-    // if(kDebugMode){
-    //   // (kDebugMode)?print("user id $userData");
-    // }
-    //
-    // // var userId = storage.read('USER_ID');
-    // if(locationController.PermissionGiven.value!='always'){
-    //   locationController.showAlert();
-    // };
-    // // (kDebugMode)?print("called");
-    // if (userId == '' || userId== null) {
-      Get.offNamed("/loginScreen");
-    // } else {
-    //   // Get.offAll(Bottom());
-    //   Get.offAll(BottomNavigation());
-    // }
   }
 }

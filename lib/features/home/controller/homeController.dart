@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../utils/helper/api_helper.dart';
+import '../model/home_model.dart';
 
 class Homecontroller extends GetxController{
   RxString title=''.obs;
@@ -24,16 +25,12 @@ class Homecontroller extends GetxController{
     changeHotelStatus(value);
 
   }
-  List item = [
-    CountOccupancy(title: 'Void', count: 0),
-    CountOccupancy(title: 'Cancelled', count: 0),
-    CountOccupancy(title: 'No Show', count: 0),
-    ];
   List item2 = [
     CountOccupancy(title: 'Total Review', count: 0),
     CountOccupancy(title: 'Positive', count: 0),
     CountOccupancy(title: 'Negative', count: 0),
   ];
+
 
   Future<void> fetchData() async {
     await getDashData(); // Fetch data using the existing method
@@ -41,7 +38,7 @@ class Homecontroller extends GetxController{
 
   ///API Calling
   var isLoading = false.obs;
-  RxMap<String, dynamic> bookingData = <String, dynamic>{}.obs;
+  Rx<DashboardModel?> bookingData = Rx<DashboardModel?>(null);
 
 
   Future<void> getDashData() async {
@@ -50,7 +47,6 @@ class Homecontroller extends GetxController{
       print("----getDashData is called-----");
 
       final String? token = box.read('access_token');
-
       final url = "${dashboardApi}";
       final response = await http.get(
         Uri.parse(url),
@@ -65,62 +61,15 @@ class Homecontroller extends GetxController{
         final responseBody = jsonDecode(response.body);
         print("responseBody: $responseBody");
 
-        var data = responseBody;
 
-        print("Data --> $data");
-        if (data != null) {
-
-          ///This is also working
-          //var bookingMonthData = List<Map<String, dynamic>>.from(data['booking_month']);
-          //
-          //         // Ensure bookingMonthData is a list and not empty
-          //         var lastBookingAmount = bookingMonthData.isNotEmpty
-          //             ? bookingMonthData.last['bookingAmount'] ?? 0.0
-          //             : 0.0;
-          //
-          var bookingMonthData = data['booking_month'] as List<dynamic>;
-
-          // Ensure bookingMonthData is a list and not empty
-          var lastBookingAmount = bookingMonthData.isNotEmpty
-              ? (bookingMonthData[bookingMonthData.length - 1] as Map<String, dynamic>)['bookingAmount'] ?? 0.0
-              : 0.0;
-
-          var dashboardData = {
-            'page_title': data['page_title'],
-            'widget': {
-              'today_booked': data['widget']['today_booked'],
-              'today_available': data['widget']['today_available'],
-              'total': data['widget']['total'],
-              'active': data['widget']['active'],
-              'pending_checkin': data['widget']['pending_checkin'],
-              'delayed_checkout': data['widget']['delayed_checkout'],
-              'upcoming_checkin': data['widget']['upcoming_checkin'],
-              'upcoming_checkout': data['widget']['upcoming_checkout'],
-            },
-            'booking_month': {
-              'bookingAmount': bookingMonthData.map((e) => (e as Map<String, dynamic>)['bookingAmount']).toList(),
-              'months': bookingMonthData.map((e) => (e as Map<String, dynamic>)['months']).toList(),
-              'currentMonthBookingAmount': lastBookingAmount,
-            },
-            'months': List<String>.from(data['months']),
-            'trx_report': data['trx_report'] != null && data['trx_report']['date'] is List
-                ? {'date': List<String>.from(data['trx_report']['date'])}
-                : {'date': []},
-            'plus_trx': List<dynamic>.from(data['plus_trx']),
-            'minus_trx': List<dynamic>.from(data['minus_trx']),
-            'total_revenue': data['total_revenue'],
-            'daily_avg_rate': data['daily_avg_rate'] != null
-                ? data['daily_avg_rate'].toDouble()
-                : 0.0,
-          };
+        if (responseBody != null) {
+          final dashboardData = DashboardModel.fromJson(responseBody);
 
           bookingData.value = dashboardData;
-          print("Last Booking amount: $lastBookingAmount");
-          print('Booking Data --> ${bookingData.value}');
+          print("Booking Data --> ${bookingData.value}");
         } else {
           print('Data is null');
-          bookingData.value = {};
-          print('Booking Data --> $bookingData');
+          bookingData.value = null;
         }
       } else if (response.statusCode == 401) {
         GetStorage().erase();
@@ -131,22 +80,9 @@ class Homecontroller extends GetxController{
     } catch (err) {
       print("Error: $err"); // Log the error for debugging
     } finally {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        isLoading.value = false; // Ensure to stop loading indicator
-      });
+      isLoading.value = false; // Ensure to stop loading indicator
     }
   }
-
-
-
-
-
-
-
-
-
-
-
 
   changeHotelStatus(value) async{
     try{

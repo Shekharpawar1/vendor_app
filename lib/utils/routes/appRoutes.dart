@@ -7,12 +7,12 @@ import 'package:fun_n_food_vendor/bindings/quick_view_binding.dart';
 import 'package:fun_n_food_vendor/bindings/rating/ReviewListBinding.dart';
 import 'package:fun_n_food_vendor/bindings/critiqueBinding.dart';
 import 'package:fun_n_food_vendor/bindings/rating/rating_binding.dart';
+import 'package:fun_n_food_vendor/bindings/spalsh/splash_binding.dart';
+import 'package:fun_n_food_vendor/features/splah/view/splash_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
-
 import '../../bindings/adguestinfobinding.dart';
 import '../../bindings/auth/login_binding.dart';
 import '../../bindings/booking_list_binding.dart';
-import '../../bindings/bookingdetailsBinding.dart';
 import '../../bindings/homeBinding.dart';
 import '../../bindings/home_status_binding.dart';
 import '../../bindings/notificationBinding.dart';
@@ -21,7 +21,6 @@ import '../../bindings/settingBinding.dart';
 import '../../bindings/work_order_binding.dart';
 import '../../features/AddGuestProfileScreen.dart';
 import '../../features/Booking/view/quickBooking.dart';
-import '../../features/booking_details/view/BookingDetails.dart';
 import '../../features/bookingList/view/bookingList.dart';
 import '../../features/edit_guest_info/view/editGuestProfile.dart';
 import '../../features/home/view/BottomNav.dart';
@@ -41,6 +40,7 @@ import '../../features/work_order_list.dart';
 
 
 class AppRoutes {
+  static const splash = '/splash';
   static const home = '/home';
   static const profile = '/profile';
   static const settings = '/settings';
@@ -54,7 +54,6 @@ class AppRoutes {
   static const quickView='/quickView';
   static const quickbooking='/quickbooking';
   static const workorder='/workorder';
-  static const initialRoute="/login";
   static const MaintenenceBlock="/MaintenenceBlockView";
   static const managerReport="/ManagerReport";
   static const Homestatus="/homeStatus";
@@ -62,7 +61,13 @@ class AppRoutes {
   static const bookingDetails="/bookingDetails";
   static const addGuestInfo="/addGuestInfo";
   static const editGuestInfo="/editGuestInfo";
+
   static final routes = [
+    GetPage(
+        name: splash,
+        page: () => SplashScreen(),
+        binding: SplashBinding(),
+    ),
     GetPage(
         name: home,
         page: () => HomeScreen(),
@@ -148,11 +153,11 @@ class AppRoutes {
         page: () =>HouseStatusScreen(),
         binding:HomeStatusBinding()
     ) ,
-    GetPage(
-        name: bookingDetails,
-        page: () =>BookingDetails(),
-        binding:BookingDetailsbinding()
-    ) ,
+    // GetPage(
+    //     name: bookingDetails,
+    //     // page: () =>BookingDetails(),
+    //     binding:BookingDetailsbinding()
+    // ) ,
     GetPage(
         name: addGuestInfo,
         page: () =>AddGuestInfo(),

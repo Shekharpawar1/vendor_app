@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fun_n_food_vendor/bindings/auth/login_binding.dart';
+import 'package:fun_n_food_vendor/bindings/spalsh/splash_binding.dart';
 import 'package:fun_n_food_vendor/localization/language.dart';
 import 'package:fun_n_food_vendor/localization/language_en.dart';
 import 'package:fun_n_food_vendor/utils/routes/appRoutes.dart';
@@ -47,8 +48,8 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.routes,
-      initialRoute: AppRoutes.initialRoute,
-        initialBinding: LoginBinding(),
+      initialRoute: AppRoutes.splash,
+        initialBinding: SplashBinding(),
       // home: MainPage(),
     );
   }
