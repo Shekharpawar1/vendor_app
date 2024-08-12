@@ -57,7 +57,7 @@ class BookingListController extends GetxController {
     }
   }
 
-  showBottomSheet(BuildContext context) {
+  showBottomSheet(BuildContext context, bookingId ) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -75,7 +75,7 @@ class BookingListController extends GetxController {
                 leading: Icon(Icons.remove_red_eye),
                 title: Text('View Reservation'),
                 onTap: () {
-                  Get.to(() => BookingDetails());
+                  Get.to(() => BookingDetails(BookingId: bookingId));
                   print("getting called");
                   // Get.toNamed("/bookingDetails");
                   // Navigator.pop(context);

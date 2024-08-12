@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:js_interop_unsafe';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fun_n_food_vendor/utils/helper/api_helper.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../utils/helper/styles.dart';
+import '../model/booking_detail_model.dart';
 class CommonAppBar2Controller extends GetxController {
 
   /// General Info Part
@@ -16,10 +16,16 @@ class CommonAppBar2Controller extends GetxController {
   var arrivalDate = DateTime.now().obs;
   var departureDate = (DateTime.now().add(Duration(days: 1))).obs;
 
+  CommonAppBar2Controller(String id){
+    bookingId.value = id;
+  }
+
   @override
   void onInit() {
     super.onInit();
+    getInfo();
     // Initialize formattedDate with today's date
+
     arrivalDate.value = DateTime.now();
     departureDate.value = DateTime.now().add(Duration(days: 1));
   }
@@ -252,8 +258,8 @@ class CommonAppBar2Controller extends GetxController {
       },
     );
   }
-/// Guest Info Part
-void onClose(){
+  /// Guest Info Part
+  void onClose(){
     Formkey.currentState?.dispose();
     super.onClose();
 }
@@ -319,13 +325,21 @@ void onClose(){
   ///API CALLING
   var isLoading = false.obs;
   final box = GetStorage();
-  RxList<dynamic> generalInfo = <dynamic>[].obs;
+  var bookingId = ''.obs; // Observable variable
+  RxList generalInfo = [].obs;
+  RxList bookedRoomInfo = [].obs;
+  RxList roomTypeInfo = [].obs;
+  RxList paymentInfo =[].obs;
 
   Future<void> getInfo() async {
     try {
       isLoading.value = true;
       final String? token = box.read('access_token');
-      final url = '${bookingDetail}';
+      print('controller id  ---${bookingId.value}');
+      // final String? id = box.read('user_id');
+      final url = '${bookingDetail}/${bookingId.value}';
+      print("URL: $url");
+
       final response = await http.get(
         Uri.parse(url),
         headers: {
@@ -336,46 +350,31 @@ void onClose(){
       print('Status Code ---> ${response.statusCode}');
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
-        print('Data = ${responseBody['data']}');
-
-        var data = responseBody['data']['booking'];
+        final booking = Booking.fromJson(responseBody);
 
         // Clear previous data
         generalInfo.clear();
+        bookedRoomInfo.clear();
+        paymentInfo.clear();
 
-        // Add mapped data to generalInfo
-        generalInfo.add({
-          'id': data['id'],
-          'booking_number': data['booking_number'],
-          'check_in': data['check_in'],
-          'check_out': data['check_out'],
-          'contact_info': {
-            'name': data['contact_info']['name'],
-            'phone': data['contact_info']['phone'],
-          },
-          'total_adult': data['total_adult'],
-          'total_child': data['total_child'],
-          'total_discount': data['total_discount'],
-          'tax_charge': data['tax_charge'],
-          'booking_fare': data['booking_fare'],
-          'service_cost': data['service_cost'],
-          'extra_charge': data['extra_charge'],
-          'paid_amount': data['paid_amount'],
-          'cancellation_fee': data['cancellation_fee'],
-          'refunded_amount': data['refunded_amount'],
-          'key_status': data['key_status'],
-          'status': data['status'],
-          'checked_in_at': data['checked_in_at'],
-          'checked_out_at': data['checked_out_at'],
-          'created_at': data['created_at'],
-          'updated_at': data['updated_at'],
-          'total_amount': data['total_amount'],
-          'due_amount': data['due_amount'],
-          'tax_percent': data['tax_percent'],
-          'used_extra_service': data['used_extra_service'],
-          'payments': data['payments'],
-          'booked_rooms': data['booked_rooms'],
+        // Add new data from the parsed Booking model
+        generalInfo.value.add(booking.data.booking.toJson());
+
+        // Handle dynamic date keys and ensure it's a list
+        List<dynamic> roomList = [];
+        booking.data.bookedRooms.roomsByDate.forEach((dateKey, rooms) {
+          roomList.addAll(rooms.map((room) => room.toJson()));
         });
+
+        // Assign the room list to bookedRoomInfo
+        bookedRoomInfo.value = roomList;
+
+        paymentInfo.value.add(booking.data.paymentInfo.toJson());
+
+
+        print("General Info --> ${generalInfo}");
+        print("Booked Room Info --> ${bookedRoomInfo}");
+        print("Payment Info --> ${paymentInfo}");
       } else if (response.statusCode == 401) {
         GetStorage().erase();
         Get.offAllNamed("/bottomNav");
@@ -386,6 +385,137 @@ void onClose(){
       isLoading.value = false;
     }
   }
+
+
+
+// Future<void> getInfo() async {
+  //   try {
+  //     isLoading.value = true;
+  //     final String? token = box.read('access_token');
+  //     final String? id = box.read('user_id');
+  //     final url = '${bookingDetail}/$id';
+  //     print("URL: $url");
+  //
+  //     final response = await http.get(
+  //       Uri.parse(url),
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //       },
+  //     );
+  //
+  //     print('Status Code ---> ${response.statusCode}');
+  //     if (response.statusCode == 200) {
+  //       final responseBody = jsonDecode(response.body);
+  //       var data = responseBody['data'] ?? {};
+  //       print('Data = ${data}');
+  //
+  //       // Clear previous data
+  //       generalInfo.clear();
+  //       bookedRoomInfo.clear();
+  //       paymentInfo.clear();
+  //
+  //       // Extract booking data
+  //       var booking = data['booking'] ?? {};
+  //
+  //       // Map general booking data safely
+  //       var mappedBooking = {
+  //         'id': booking['id'] ?? 'N/A',
+  //         'booking_number': booking['booking_number'] ?? 'N/A',
+  //         'check_in': booking['check_in'] ?? 'N/A',
+  //         'check_out': booking['check_out'] ?? 'N/A',
+  //         'contact_info': {
+  //           'name': booking['contact_info']?['name'] ?? 'N/A',
+  //           'phone': booking['contact_info']?['phone'] ?? 'N/A',
+  //         },
+  //         'total_adult': booking['total_adult'] ?? 0,
+  //         'total_child': booking['total_child'] ?? 0,
+  //         'total_discount': booking['total_discount'] ?? '0.0',
+  //         'tax_charge': booking['tax_charge'] ?? '0.0',
+  //         'booking_fare': booking['booking_fare'] ?? '0.0',
+  //         'service_cost': booking['service_cost'] ?? '0.0',
+  //         'extra_charge': booking['extra_charge'] ?? '0.0',
+  //         'paid_amount': booking['paid_amount'] ?? '0.0',
+  //         'total_amount': booking['total_amount'] ?? 0,
+  //         'due_amount': booking['due_amount'] ?? 0,
+  //         'tax_percent': booking['tax_percent'] ?? 0,
+  //         'cancellation_fee': booking['cancellation_fee'] ?? '0.0',
+  //         'refunded_amount': booking['refunded_amount'] ?? '0.0',
+  //       };
+  //
+  //       generalInfo.value.add(mappedBooking);
+  //
+  //       // Map booked rooms data
+  //       var bookedRooms = booking['booked_rooms'] ?? [];
+  //       if (bookedRooms.isNotEmpty) {
+  //         bookedRoomInfo.addAll(bookedRooms.map((room) {
+  //           return {
+  //             'id': room['id'] ?? 'N/A',
+  //             'booking_id': room['booking_id'] ?? 'N/A',
+  //             'room_type_id': room['room_type_id'] ?? 'N/A',
+  //             'room_id': room['room_id'] ?? 'N/A',
+  //             'room_number': room['room_number'] ?? 'N/A',
+  //             'booked_for': room['booked_for'] ?? 'N/A',
+  //             'fare': room['fare'] ?? '0.0',
+  //             'discount': room['discount'] ?? '0.0',
+  //             'tax_charge': room['tax_charge'] ?? '0.0',
+  //             'cancellation_fee': room['cancellation_fee'] ?? '0.0',
+  //             'status': room['status'] ?? 'N/A',
+  //             'room': room['room'] != null ? (room['room'] as List).map((roomInfo) {
+  //               return {
+  //                 'id': roomInfo['id'] ?? 'N/A',
+  //                 'owner_id': roomInfo['owner_id'] ?? 'N/A',
+  //                 'room_type_id': roomInfo['room_type_id'] ?? 'N/A',
+  //                 'room_number': roomInfo['room_number'] ?? 'N/A',
+  //                 'status': roomInfo['status'] ?? 'N/A',
+  //               };
+  //             }).toList() : [],
+  //           };
+  //         }).toList());
+  //
+  //         // Now correctly map room type information if available
+  //         roomTypeInfo.addAll(data['bookedRooms']['room_type'].map((roomType) {
+  //           if (roomType != null) {
+  //             return {
+  //               'name': roomType['name'] ?? 'N/A',
+  //               'image': roomType['image'] ?? '',
+  //               'discounted_fare': roomType['discounted_fare'] ?? 0,
+  //               'discount': roomType['discount'] ?? 0,
+  //             };
+  //           }
+  //         }).toList());
+  //       }
+  //
+  //
+  //
+  //       // Extract payment info safely
+  //       var paymentInfoData = data['paymentInfo'] ?? {};
+  //       paymentInfo.value.add({
+  //         'subtotal': paymentInfoData['subtotal'] ?? 0,
+  //         'total_amount': paymentInfoData['total_amount'] ?? 0,
+  //         'canceled_fare': paymentInfoData['canceled_fare'] ?? 0,
+  //         'canceled_tax_charge': paymentInfoData['canceled_tax_charge'] ?? 0,
+  //         'payment_received': paymentInfoData['payment_received'] ?? 0,
+  //         'refunded': paymentInfoData['refunded'] ?? 0,
+  //       });
+  //
+  //       print("General Info --> ${generalInfo}");
+  //       print("Booked Room Info --> ${bookedRoomInfo}");
+  //       print("RoomType Info --> ${roomTypeInfo}");
+  //       print("Payment Info --> ${paymentInfo}");
+  //     } else if (response.statusCode == 401) {
+  //       GetStorage().erase();
+  //       Get.offAllNamed("/bottomNav");
+  //     }
+  //   } catch (e) {
+  //     print("Error: $e");
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+
+
+
 }
 
 

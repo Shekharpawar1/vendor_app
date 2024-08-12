@@ -100,7 +100,7 @@ class Homecontroller extends GetxController{
             'booking_month': {
               'bookingAmount': bookingMonthData.map((e) => (e as Map<String, dynamic>)['bookingAmount']).toList(),
               'months': bookingMonthData.map((e) => (e as Map<String, dynamic>)['months']).toList(),
-              'currentMonthBookingAmount': lastBookingAmount,
+              'currentMonthBookingAmount': lastBookingAmount??0.0,
             },
             'months': List<String>.from(data['months']),
             'trx_report': data['trx_report'] != null && data['trx_report']['date'] is List

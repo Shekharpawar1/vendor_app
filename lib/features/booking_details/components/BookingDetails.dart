@@ -9,234 +9,209 @@ import '../../../CommonWidgets/view/commonBtn.dart';
 
 Widget buildGeneralInfo(BuildContext context, CommonAppBar2Controller controller) {
   return SingleChildScrollView(
-    child: Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Res # : UC43DD66891500',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              Text(
-                'Folio # : 538',
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 30),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.earthAmericas,
-                    color: Colors.black45,
-                    size: 18.0,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    'Email',
-                    style: Text10,
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Container(
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    'Unconfirmed Reservation',
-                    style: Text11,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Column(
+    child:Obx((){
+      final data = controller.generalInfo.isNotEmpty ? controller.generalInfo[0] : {};
+      final room = controller.bookedRoomInfo.isNotEmpty ? controller.bookedRoomInfo[0] : {};
+      final payment = controller.paymentInfo.isNotEmpty ? controller.paymentInfo[0] : {};
+      final checkInDate = data['check_in'] != null ? DateTime.parse(data['check_in']) : DateTime.now();
+      final checkOutDate = data['check_out'] != null ? DateTime.parse(data['check_out']) : DateTime.now();
+      final differenceInDays = checkOutDate.difference(checkInDate).inDays;
+
+      return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Arrival', style: Text12),
-                            SizedBox(height: 5),
-                            InkWell(
-                              onTap: () => controller.selectDate(context, true),
-                              child: Obx(
-                                    () {
-                                  final dateText = DateFormat('d MMM yyyy').format(controller.arrivalDate.value);
-                                  final parts = dateText.split(' ');
-                                  if (parts.length == 3) {
-                                    final day = parts[0];
-                                    final month = parts[1];
-                                    final year = parts[2];
-                                    return RichText(
-                                      text: TextSpan(
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: day,
-                                            style: TextStyle(
-                                              color: Colors.purpleAccent.withOpacity(0.7),
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 25,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: ' $month $year',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  } else {
-                                    return Text('Invalid Date');
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('Nights', style: Text12),
-                            SizedBox(height: 5),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.purpleAccent.withOpacity(0.7),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: EdgeInsets.all(10),
-                              child: Obx(
-                                    () {
-                                  final nights = controller.numberOfNights;
-                                  return Text(
-                                    '$nights',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text('Departure', style: Text12),
-                            SizedBox(height: 5),
-                            InkWell(
-                              onTap: () => controller.selectDate(context, false),
-                              child: Obx(
-                                    () {
-                                  final dateText = DateFormat('d MMM yyyy').format(controller.departureDate.value);
-                                  final parts = dateText.split(' ');
-                                  if (parts.length == 3) {
-                                    final day = parts[0];
-                                    final month = parts[1];
-                                    final year = parts[2];
-                                    return RichText(
-                                      text: TextSpan(
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: day,
-                                            style: TextStyle(
-                                              color: Colors.purpleAccent.withOpacity(0.7),
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 25,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: ' $month $year',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  } else {
-                                    return Text('Invalid Date');
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                Text(
+                  data['booking_number'] ?? 'N/A',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
+                Text(
+                  'Id # : ${data['id']}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.earthAmericas,
+                      color: Colors.black45,
+                      size: 18.0,
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      'Email',
+                      style: Text10,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 3),
                 Container(
-                  width: Get.width,
-                  height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    border: Border.all(
-                      color: Colors.grey,
+                    color: primaryColor,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      'Unconfirmed Reservation',
+                      style: Text11,
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.home,
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Arrival date
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Arrival', style: Text12),
+                              SizedBox(height: 5),
+                              InkWell(
+                                onTap: () => controller.selectDate(context, true),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: DateFormat('d').format(checkInDate),
+                                        style: TextStyle(
+                                          color: Colors.purpleAccent.withOpacity(0.7),
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: DateFormat(' MMM yyyy').format(checkInDate),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Nights
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('Nights', style: Text12),
+                              SizedBox(height: 5),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.purpleAccent.withOpacity(0.7),
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  '$differenceInDays',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Departure date
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text('Departure', style: Text12),
+                              SizedBox(height: 5),
+                              InkWell(
+                                onTap: () => controller.selectDate(context, false),
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: DateFormat('d').format(checkOutDate),
+                                        style: TextStyle(
+                                          color: Colors.purpleAccent.withOpacity(0.7),
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 25,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: DateFormat(' MMM yyyy').format(checkOutDate),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: Get.width,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.2),
+                      border: Border.all(
                         color: Colors.grey,
                       ),
-                      SizedBox(width: 2),
-                      Text(
-                        'DELUX NEW  |  DU01',
-                      ),
-                    ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.home,
+                          color: Colors.grey,
+                        ),
+                        SizedBox(width: 2),
+                        Text(
+                          '${room['room_type']?['name']?? 'N/A'}  |  ${room['room_number'] ?? 'N/A'}',
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 2),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: controller.roomDetails.length,
-                    itemBuilder: (context, index) {
-                      final item = controller.roomDetails[index];
-                      return Column(
+
+                  SizedBox(height: 2),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:  Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -244,7 +219,7 @@ Widget buildGeneralInfo(BuildContext context, CommonAppBar2Controller controller
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  '${item['title']}',
+                                  'Rate Type',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.normal,
@@ -265,7 +240,46 @@ Widget buildGeneralInfo(BuildContext context, CommonAppBar2Controller controller
                               Expanded(
                                 flex: 2,
                                 child: Text(
-                                  item['info']!,
+                                 'Elite Room',
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  'Avg Daily Rate',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  ':',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  'Rs. ${double.parse(room['fare'] ?? '0.00').toStringAsFixed(2)}',
                                   textAlign: TextAlign.end,
                                   style: TextStyle(
                                     fontSize: 16,
@@ -278,231 +292,569 @@ Widget buildGeneralInfo(BuildContext context, CommonAppBar2Controller controller
                           ),
                           SizedBox(height: 10),
                         ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: 12, bottom: 4),
-                  child: Text(
-                    'SUMMARY',
-                    style: Text4,
-                  ),
-                ),
-                Divider(),
-                Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.summary.length,
-                        itemBuilder: (context, index) {
-                          final item = controller.summary[index];
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      '${item['title']}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      ':',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      item['price']!,
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                            ],
-                          );
-                        },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'Balance:',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 12, bottom: 4),
+                    child: Text(
+                      'SUMMARY',
+                      style: Text4,
+                    ),
+                  ),
+                  Divider(),
+                  Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Total Charges',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              ':',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                ':',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              controller.total,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                color: Colors.purpleAccent.withOpacity(0.7),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Rs. ${double.parse(payment['subtotal']?.toString() ?? '0.00').toStringAsFixed(2)}',
+
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        SizedBox(height: 2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Total Credits',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                ':',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                               'Rs. 0.0',
+
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Balance',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                ':',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                'Rs. ${double.parse(payment['subtotal']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  color: Colors.purpleAccent.withOpacity(0.7),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(),
+                      Padding(
+                        padding: EdgeInsets.only(top: 12, bottom: 4),
+                        child: Text(
+                          'DETAILS',
+                          style: Text4,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          controller.isExpanded.value
+                              ? Icons.arrow_drop_up
+                              : Icons.arrow_drop_down,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          controller.isExpanded.value = !controller.isExpanded.value;
+                        },
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 10),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 12, bottom: 4),
-                      child: Text(
-                        'DETAILS',
-                        style: Text4,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        controller.isExpanded.value
-                            ? Icons.arrow_drop_up
-                            : Icons.arrow_drop_down,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        controller.isExpanded.value = !controller.isExpanded.value;
-                      },
-                    ),
-                  ],
-                ),
 
-                controller.isExpanded.value
-                    ? Column(
-                  children: [
-                    Divider(),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.charges.length,
-                        itemBuilder: (context, index) {
-                          final detail = controller.charges[index];
-                          return Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
+                  controller.isExpanded.value
+                      ? Column(
+                    children: [
+                      Divider(),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
 
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      '${detail['title']}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Room Charges',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      ':',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      detail['price']!,
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal,
-                                      ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(data['booking_fare']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )
-                    : SizedBox.shrink(),
-              ],
-            ),
-          ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
 
-        ],
-      ),
-    ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Discount',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(data['total_discount']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Tax',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(data['tax_charge']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Extra Charges',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(data['extra_charge']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Unposted Inclusion Rate',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. 0.00',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Balance Transfer',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    '0.00',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Amount Paid',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(data['paid_amount']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Round Off',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(data['booking_fare']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Total',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    ':',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                    'Rs. ${double.parse(payment['total_amount']?.toString() ?? '0.00').toStringAsFixed(2)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      color: Colors.purpleAccent.withOpacity(0.7),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                      : SizedBox.shrink(),
+                ],
+              ),
+            ),
+
+          ],
+        ),
+      );
+    })
   );
 }
 Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) {
+  final data = controller.generalInfo.isNotEmpty ? controller.generalInfo[0] : {};
+  final room = controller.bookedRoomInfo.isNotEmpty ? controller.bookedRoomInfo[0] : {};
+  final payment = controller.paymentInfo.isNotEmpty ? controller.paymentInfo[0] : {};
+  final checkInDate = data['check_in'] != null ? DateTime.parse(data['check_in']) : DateTime.now();
+  final checkOutDate = data['check_out'] != null ? DateTime.parse(data['check_out']) : DateTime.now();
+  final differenceInDays = checkOutDate.difference(checkInDate).inDays;
   return Padding(
     padding: const EdgeInsets.all(16.0),
     child: SingleChildScrollView(
@@ -549,7 +901,7 @@ Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) 
                                 ),
                                 SizedBox(height: 3),
                                 Text(
-                                  '',
+                                  data['contact_info']?['phone'] ?? '',
                                   style: Text13,
                                 ),
                               ],
@@ -576,7 +928,7 @@ Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) 
                                 ),
                                 SizedBox(height: 3),
                                 Text(
-                                  '9995099950',
+                                  data['guest']?['mobile'] ?? '',
                                   style: Text13,
                                 ),
                               ],
@@ -607,7 +959,7 @@ Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) 
                                 ),
                                 SizedBox(height: 3),
                                 Text(
-                                  'Booking@monoco.in',
+                                  data['guest']?['email'] ?? '',
                                   style: Text13,
                                 ),
                               ],
@@ -1132,9 +1484,15 @@ Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) 
                                   ],
                                 ),
                                 SizedBox(height: 3),
-                                Text(
-                                  '03/20/2024  12:00:00 PM',
-                                  style: Text13,
+                                RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: DateFormat('d MMM yyyy').format(checkInDate),
+                                        style:Text10,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -1159,9 +1517,15 @@ Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) 
                                   ],
                                 ),
                                 SizedBox(height: 3),
-                                Text(
-                                  '03/21/2024  11:00:00 AM',
-                                  style: Text10,
+                                RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: DateFormat('d MMM yyyy').format(checkInDate),
+                                        style:Text10,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -1411,13 +1775,798 @@ Widget buildGuestInfo(BuildContext context, CommonAppBar2Controller controller) 
     ),
   );
 }
-Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller controller){
+// Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller controller){
+//   final data = controller.generalInfo.isNotEmpty ? controller.generalInfo[0] : {};
+//   final room = controller.bookedRoomInfo.isNotEmpty ? controller.bookedRoomInfo[0] : {};
+//   final payment = controller.paymentInfo.isNotEmpty ? controller.paymentInfo[0] : {};
+//   final DateFormat formatter = DateFormat('EEEE, d MMM, yyyy'); // Example format: Friday, Aug 9, 2024
+//
+//   final checkInDate = data['check_in'] != null
+//       ? DateTime.parse(data['check_in'])
+//       : DateTime.now();
+//   final checkOutDate = data['check_out'] != null
+//       ? DateTime.parse(data['check_out'])
+//       : DateTime.now();
+//
+//   final checkInFormatted = formatter.format(checkInDate); // Includes day name
+//   final checkOutFormatted = formatter.format(checkOutDate); // Includes day name
+//   return Padding(
+//     padding: const EdgeInsets.all(16.0),
+//     child: ListView.builder(
+//
+//       itemCount: controller.bookedRoomInfo.length , // Set this to the number of items you want to display
+//       itemBuilder: (context, index) {
+//         return Padding(
+//           padding: const EdgeInsets.only(bottom: 30.0), // Padding between cards
+//           child: Container(
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(5),
+//             ),
+//             child: Column(
+//               children: [
+//                 Padding(
+//                   padding: const EdgeInsets.only(top: 12, bottom: 4),
+//                   child: RichText(
+//                     text: TextSpan(
+//                       children: <TextSpan>[
+//                         TextSpan(
+//                           text: DateFormat('d MMM yyyy, EEEE').format(checkInDate),
+//                           style: Text4,
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//                 Divider(),
+//                 Padding(
+//                   padding: const EdgeInsets.all(12.0),
+//                   child: Column(
+//                     children: [
+//                       Row(
+//                         children: [
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Room No:',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   'Du01',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           SizedBox(width: 20),
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Rate Type',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   'Elite Room',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(height: 10),
+//                       Row(
+//                         children: [
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'PAX',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '2/0',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           SizedBox(width: 20),
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Child Age',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '-',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(height: 10),
+//                       Row(
+//                         children: [
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Room Charges',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '-0',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Discount',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '-0',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(height: 10),
+//                       Row(
+//                         children: [
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Tax',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '-0',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Adjustment',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '-0',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       SizedBox(height: 10),
+//                       Row(
+//                         children: [
+//                           Expanded(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Net Amount',
+//                                   style: Text15,
+//                                 ),
+//                                 SizedBox(height: 3),
+//                                 Text(
+//                                   '-0',
+//                                   style: Text13,
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//       },
+//     ),
+//   );
+//
+//
+//   // return Padding(
+//   //   padding: const EdgeInsets.all(16.0),
+//   //   child: SingleChildScrollView(
+//   //     child: Column(
+//   //       children: [
+//   //         Container(
+//   //           decoration: BoxDecoration(
+//   //             color: Colors.white,
+//   //             borderRadius: BorderRadius.circular(5),
+//   //           ),
+//   //           child: Column(
+//   //             children: [
+//   //               Padding(
+//   //                 padding: const EdgeInsets.only(top: 12, bottom: 4),
+//   //                 child: RichText(
+//   //                   text: TextSpan(
+//   //                     children: <TextSpan>[
+//   //
+//   //                       TextSpan(
+//   //                         text: DateFormat('d MMM yyyy, EEEE').format(checkInDate),
+//   //                         style: Text4,
+//   //                       ),
+//   //                     ],
+//   //                   ),
+//   //                 ),
+//   //               ),
+//   //               Divider(),
+//   //               Padding(
+//   //                 padding: const EdgeInsets.all(12.0),
+//   //                 child: Column(
+//   //                   children: [
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Room No:',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 'Du01',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         SizedBox(width: 20),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Rate Type',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 'Elite Room',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'PAX',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '2/0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         SizedBox(width: 20),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Child Age',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Room Charges',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Discount',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Tax',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Adjustment',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Net Amount',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //
+//   //                       ],
+//   //                     ),
+//   //                   ],
+//   //                 ),
+//   //               ),
+//   //             ],
+//   //           ),
+//   //         ),
+//   //         SizedBox(height: 30),
+//   //         Container(
+//   //           decoration: BoxDecoration(
+//   //             color: Colors.white,
+//   //             borderRadius: BorderRadius.circular(5),
+//   //           ),
+//   //           child: Column(
+//   //             children: [
+//   //               Padding(
+//   //                 padding: const EdgeInsets.only(top: 12, bottom: 4),
+//   //                 child: Text(
+//   //                   '03/21/2024 Thu',
+//   //                   style: Text4,
+//   //                 ),
+//   //               ),
+//   //               Divider(),
+//   //               Padding(
+//   //                 padding: const EdgeInsets.all(12.0),
+//   //                 child: Column(
+//   //                   children: [
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Room No:',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 'Du01',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         SizedBox(width: 20),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Rate Type',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 'Elite Room',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'PAX',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '2/0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         SizedBox(width: 20),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Child Age',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Room Charges',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Discount',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Tax',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Adjustment',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //                       ],
+//   //                     ),
+//   //                     SizedBox(height: 10),
+//   //                     Row(
+//   //                       children: [
+//   //                         Expanded(
+//   //                           child: Column(
+//   //                             crossAxisAlignment: CrossAxisAlignment.start,
+//   //                             children: [
+//   //                               Text(
+//   //                                 'Net Amount',
+//   //                                 style: Text15,
+//   //                               ),
+//   //                               SizedBox(height: 3),
+//   //                               Text(
+//   //                                 '-0',
+//   //                                 style: Text13,
+//   //                               ),
+//   //                             ],
+//   //                           ),
+//   //                         ),
+//   //
+//   //                       ],
+//   //                     ),
+//   //                   ],
+//   //                 )
+//   //               ),
+//   //             ],
+//   //           ),
+//   //         ),
+//   //         SizedBox(height: 30),
+//   //         // Container(
+//   //         //   decoration: BoxDecoration(
+//   //         //     color: Colors.white,
+//   //         //     borderRadius: BorderRadius.circular(5),
+//   //         //   ),
+//   //         //   child: Column(
+//   //         //     children: [
+//   //         //       Padding(
+//   //         //         padding: const EdgeInsets.only(top: 12, bottom: 4),
+//   //         //         child: Text(
+//   //         //           'Transport Information',
+//   //         //           style: Text4,
+//   //         //         ),
+//   //         //       ),
+//   //         //       Divider(),
+//   //         //       Padding(
+//   //         //         padding: const EdgeInsets.all(12.0),
+//   //         //         child: Column(
+//   //         //           children: [
+//   //         //             Row(
+//   //         //               children: [
+//   //         //                 Text(
+//   //         //                   'Pick up:',
+//   //         //                   style: Text9,
+//   //         //                 ),
+//   //         //                 SizedBox(width: 115),
+//   //         //                 Text(
+//   //         //                   'Drop off:',
+//   //         //                   style: Text9,
+//   //         //                 ),
+//   //         //               ],
+//   //         //             ),
+//   //         //             SizedBox(height: 10),
+//   //         //             Row(
+//   //         //               children: [
+//   //         //                 Expanded(
+//   //         //                   child: Column(
+//   //         //                     crossAxisAlignment: CrossAxisAlignment.start,
+//   //         //                     children: [
+//   //         //                       Row(
+//   //         //                         children: [
+//   //         //                           Icon(
+//   //         //                             Icons.av_timer,
+//   //         //                             size: 20,
+//   //         //                             color: Colors.grey,
+//   //         //                           ),
+//   //         //                           SizedBox(width: 5),
+//   //         //                           Text(
+//   //         //                             'Expairy Date:',
+//   //         //                             style: Text15,
+//   //         //                           ),
+//   //         //                         ],
+//   //         //                       ),
+//   //         //                       SizedBox(height: 3),
+//   //         //                       Text(
+//   //         //                         '',
+//   //         //                         style: Text13,
+//   //         //                       ),
+//   //         //                     ],
+//   //         //                   ),
+//   //         //                 ),
+//   //         //                 SizedBox(width: 20),
+//   //         //                 Expanded(
+//   //         //                   child: Column(
+//   //         //                     crossAxisAlignment: CrossAxisAlignment.start,
+//   //         //                     children: [
+//   //         //                       Row(
+//   //         //                         children: [
+//   //         //                           FaIcon(
+//   //         //                             FontAwesomeIcons.calendarDay,
+//   //         //                             color: Colors.grey,
+//   //         //                             size: 18.0,
+//   //         //                           ),
+//   //         //                           SizedBox(width: 5),
+//   //         //                           Text(
+//   //         //                             'Date of Birth:',
+//   //         //                             style: Text15,
+//   //         //                           ),
+//   //         //                         ],
+//   //         //                       ),
+//   //         //                       SizedBox(height: 3),
+//   //         //                       Text(
+//   //         //                         '',
+//   //         //                         style: Text10,
+//   //         //                       ),
+//   //         //                     ],
+//   //         //                   ),
+//   //         //                 ),
+//   //         //               ],
+//   //         //             ),
+//   //         //             SizedBox(height: 10),
+//   //         //             Row(
+//   //         //               children: [
+//   //         //                 Expanded(
+//   //         //                   child: Column(
+//   //         //                     crossAxisAlignment: CrossAxisAlignment.start,
+//   //         //                     children: [
+//   //         //                       Row(
+//   //         //                         children: [
+//   //         //                           Icon(
+//   //         //                             Icons.flag,
+//   //         //                             size: 20,
+//   //         //                             color: Colors.grey,
+//   //         //                           ),
+//   //         //                           SizedBox(width: 5),
+//   //         //                           Text(
+//   //         //                             'Nationality:',
+//   //         //                             style: Text15,
+//   //         //                           ),
+//   //         //                         ],
+//   //         //                       ),
+//   //         //                       SizedBox(height: 3),
+//   //         //                       Text(
+//   //         //                         'Dominance Republic',
+//   //         //                         style: Text13,
+//   //         //                       ),
+//   //         //                     ],
+//   //         //                   ),
+//   //         //                 ),
+//   //         //               ],
+//   //         //             ),
+//   //         //           ],
+//   //         //         ),
+//   //         //       ),
+//   //         //     ],
+//   //         //   ),
+//   //         // ),
+//   //       ],
+//   //     ),
+//   //   ),
+//   // );
+// }
+Widget buildRoomChargesInfo(BuildContext context, CommonAppBar2Controller controller) {
+  final data = controller.generalInfo.isNotEmpty ? controller.generalInfo[0] : {};
+  final payment = controller.paymentInfo.isNotEmpty ? controller.paymentInfo[0] : {};
+  final DateFormat formatter = DateFormat('EEEE, d MMM, yyyy'); // Example format: Friday, Aug 9, 2024
+
+  final checkInDate = data['check_in'] != null
+      ? DateTime.parse(data['check_in'])
+      : DateTime.now();
+  final checkOutDate = data['check_out'] != null
+      ? DateTime.parse(data['check_out'])
+      : DateTime.now();
+
+  final checkInFormatted = formatter.format(checkInDate); // Includes day name
+  final checkOutFormatted = formatter.format(checkOutDate); // Includes day name
+
   return Padding(
     padding: const EdgeInsets.all(16.0),
-    child: SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
+    child: ListView.builder(
+      itemCount: 2,
+      itemBuilder: (context, index) {
+        final room = controller.bookedRoomInfo[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 30.0),
+          child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -1426,9 +2575,15 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 12, bottom: 4),
-                  child: Text(
-                    '03/20/2024 Wed',
-                    style: Text4,
+                  child: RichText(
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: DateFormat('d MMM yyyy, EEEE').format(checkInDate),
+                          style: Text4,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Divider(),
@@ -1442,15 +2597,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Room No:',
-                                  style: Text15,
-                                ),
+                                Text('Room No:', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  'Du01',
-                                  style: Text13,
-                                ),
+                                Text(room['room_no'] ?? 'N/A', style: Text13),
                               ],
                             ),
                           ),
@@ -1459,15 +2608,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Rate Type',
-                                  style: Text15,
-                                ),
+                                Text('Rate Type', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  'Elite Room',
-                                  style: Text13,
-                                ),
+                                Text(room['rate_type'] ?? 'N/A', style: Text13),
                               ],
                             ),
                           ),
@@ -1480,15 +2623,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'PAX',
-                                  style: Text15,
-                                ),
+                                Text('PAX', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '2/0',
-                                  style: Text13,
-                                ),
+                                Text(room['pax'] ?? 'N/A', style: Text13),
                               ],
                             ),
                           ),
@@ -1497,15 +2634,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Child Age',
-                                  style: Text15,
-                                ),
+                                Text('Child Age', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '-',
-                                  style: Text13,
-                                ),
+                                Text(room['child_age'] ?? 'N/A', style: Text13),
                               ],
                             ),
                           ),
@@ -1518,15 +2649,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Room Charges',
-                                  style: Text15,
-                                ),
+                                Text('Room Charges', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
+                                Text(room['room_charges']?.toString() ?? '-0', style: Text13),
                               ],
                             ),
                           ),
@@ -1534,15 +2659,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Discount',
-                                  style: Text15,
-                                ),
+                                Text('Discount', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
+                                Text(room['discount']?.toString() ?? '-0', style: Text13),
                               ],
                             ),
                           ),
@@ -1555,15 +2674,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Tax',
-                                  style: Text15,
-                                ),
+                                Text('Tax', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
+                                Text(room['tax']?.toString() ?? '-0', style: Text13),
                               ],
                             ),
                           ),
@@ -1571,15 +2684,9 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Adjustment',
-                                  style: Text15,
-                                ),
+                                Text('Adjustment', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
+                                Text(room['adjustment']?.toString() ?? '-0', style: Text13),
                               ],
                             ),
                           ),
@@ -1592,19 +2699,12 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Net Amount',
-                                  style: Text15,
-                                ),
+                                Text('Net Amount', style: Text15),
                                 SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
+                                Text(room['net_amount']?.toString() ?? '-0', style: Text13),
                               ],
                             ),
                           ),
-
                         ],
                       ),
                     ],
@@ -1613,336 +2713,12 @@ Widget buildRoomChargesInfo(BuildContext context,CommonAppBar2Controller control
               ],
             ),
           ),
-          SizedBox(height: 30),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 12, bottom: 4),
-                  child: Text(
-                    '03/21/2024 Thu',
-                    style: Text4,
-                  ),
-                ),
-                Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Room No:',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  'Du01',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Rate Type',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  'Elite Room',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'PAX',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '2/0',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Child Age',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '-',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Room Charges',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Discount',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Tax',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Adjustment',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Net Amount',
-                                  style: Text15,
-                                ),
-                                SizedBox(height: 3),
-                                Text(
-                                  '-0',
-                                  style: Text13,
-                                ),
-                              ],
-                            ),
-                          ),
-
-                        ],
-                      ),
-                    ],
-                  )
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 30),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     borderRadius: BorderRadius.circular(5),
-          //   ),
-          //   child: Column(
-          //     children: [
-          //       Padding(
-          //         padding: const EdgeInsets.only(top: 12, bottom: 4),
-          //         child: Text(
-          //           'Transport Information',
-          //           style: Text4,
-          //         ),
-          //       ),
-          //       Divider(),
-          //       Padding(
-          //         padding: const EdgeInsets.all(12.0),
-          //         child: Column(
-          //           children: [
-          //             Row(
-          //               children: [
-          //                 Text(
-          //                   'Pick up:',
-          //                   style: Text9,
-          //                 ),
-          //                 SizedBox(width: 115),
-          //                 Text(
-          //                   'Drop off:',
-          //                   style: Text9,
-          //                 ),
-          //               ],
-          //             ),
-          //             SizedBox(height: 10),
-          //             Row(
-          //               children: [
-          //                 Expanded(
-          //                   child: Column(
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       Row(
-          //                         children: [
-          //                           Icon(
-          //                             Icons.av_timer,
-          //                             size: 20,
-          //                             color: Colors.grey,
-          //                           ),
-          //                           SizedBox(width: 5),
-          //                           Text(
-          //                             'Expairy Date:',
-          //                             style: Text15,
-          //                           ),
-          //                         ],
-          //                       ),
-          //                       SizedBox(height: 3),
-          //                       Text(
-          //                         '',
-          //                         style: Text13,
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //                 SizedBox(width: 20),
-          //                 Expanded(
-          //                   child: Column(
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       Row(
-          //                         children: [
-          //                           FaIcon(
-          //                             FontAwesomeIcons.calendarDay,
-          //                             color: Colors.grey,
-          //                             size: 18.0,
-          //                           ),
-          //                           SizedBox(width: 5),
-          //                           Text(
-          //                             'Date of Birth:',
-          //                             style: Text15,
-          //                           ),
-          //                         ],
-          //                       ),
-          //                       SizedBox(height: 3),
-          //                       Text(
-          //                         '',
-          //                         style: Text10,
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //             SizedBox(height: 10),
-          //             Row(
-          //               children: [
-          //                 Expanded(
-          //                   child: Column(
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       Row(
-          //                         children: [
-          //                           Icon(
-          //                             Icons.flag,
-          //                             size: 20,
-          //                             color: Colors.grey,
-          //                           ),
-          //                           SizedBox(width: 5),
-          //                           Text(
-          //                             'Nationality:',
-          //                             style: Text15,
-          //                           ),
-          //                         ],
-          //                       ),
-          //                       SizedBox(height: 3),
-          //                       Text(
-          //                         'Dominance Republic',
-          //                         style: Text13,
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-        ],
-      ),
+        );
+      },
     ),
   );
 }
+
 Widget buildFolioDetails(BuildContext context, CommonAppBar2Controller controller) {
   return SingleChildScrollView(
     padding: const EdgeInsets.all(12.0),

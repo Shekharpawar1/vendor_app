@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fun_n_food_vendor/CommonWidgets/view/bottom_sheet.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
@@ -270,6 +271,9 @@ class ReservationCard extends StatelessWidget {
 
   ReservationCard({super.key, required this.controller, required this.data, required this.title});
 
+  get bookingId => ((data['booked_rooms'] != null && data['booked_rooms'].isNotEmpty)
+      ? data['booked_rooms'][0]['booking_id'] ?? 0
+      : 0).toString();
   int calculateNightDifference(String checkIn, String checkOut) {
     DateTime checkInDate = DateTime.parse(checkIn);
     DateTime checkOutDate = DateTime.parse(checkOut);
@@ -285,7 +289,7 @@ class ReservationCard extends StatelessWidget {
       );
     }
     final int nightDifference = calculateNightDifference(data['check_in'], data['check_out']);
-
+    print("BOOKING ID: $bookingId");
     return Card(
       elevation: 4.0,
       margin: EdgeInsets.all(16.0),
@@ -323,7 +327,8 @@ class ReservationCard extends StatelessWidget {
                           Text('Folio ${data['id']?.toString() ?? 'N/A'}', textScaleFactor: 1),
                           Spacer(),
                           InkWell(
-                            onTap: () => controller.showBottomSheet(context),
+                            // onTap: () => controller.showBottomSheet(context, bookingId),
+                            onTap: () => BookingBottomSheet(context: context,title: title, bookingId: bookingId).show(),
                             child: Icon(Icons.more_vert),
                           ),
                         ],

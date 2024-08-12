@@ -148,11 +148,11 @@ class AppRoutes {
         page: () =>HouseStatusScreen(),
         binding:HomeStatusBinding()
     ) ,
-    GetPage(
-        name: bookingDetails,
-        page: () =>BookingDetails(),
-        binding:BookingDetailsbinding()
-    ) ,
+    // GetPage(
+    //     name: bookingDetails,
+    //     // page: () =>BookingDetails(),
+    //     binding:BookingDetailsbinding()
+    // ) ,
     GetPage(
         name: addGuestInfo,
         page: () =>AddGuestInfo(),
